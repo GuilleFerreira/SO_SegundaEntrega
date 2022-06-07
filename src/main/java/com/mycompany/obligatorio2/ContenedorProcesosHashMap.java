@@ -67,7 +67,7 @@ public class ContenedorProcesosHashMap {
             //Por prioridad sacar a los procesos de estado bloqueado cuando haya pasado su tiempo.
         }
         //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
-        //Al final del loop, acá
+        //Al final del loop, acá, eliminar los procesos de esa lista.
         eliminarProceso(procesoParaEliminar.ID);
         //De alguna forma usar mandar al proceso a usar cpu. EN ESTA LINEA, hacer al procesador Singleton sería buena idea, sino hacer a Procesador static, o usar una clase ContenedorPrograma singleton, que contega al procesador y a este contenedor, y ahí referirme al procesador y usarCpu.
     }
