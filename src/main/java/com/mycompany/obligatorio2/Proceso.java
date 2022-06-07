@@ -34,6 +34,10 @@ public class Proceso {
         }
     }
     
+    public String pid(){
+        return String.valueOf(ID);
+    }
+    
     
     
 }

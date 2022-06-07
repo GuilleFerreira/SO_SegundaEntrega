@@ -13,6 +13,7 @@ public class Obligatorio2 {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
+        new ManejadorV1().setVisible(true);
         Procesador p;
         Proceso proceso;
         
