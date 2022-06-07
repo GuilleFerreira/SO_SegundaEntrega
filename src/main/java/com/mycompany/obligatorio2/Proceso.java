@@ -23,6 +23,7 @@ public class Proceso {
     public boolean bloqueadoPorES;
     public boolean bloqueadoPorUsuario;
     public boolean enEjecucion;
+    public long tiempoCuandoSeCreo;
     
     public Proceso(Integer id, int prioridad, long tiempoParaFinalizar) throws Exception{
         if(prioridad < 1 || prioridad > 99){

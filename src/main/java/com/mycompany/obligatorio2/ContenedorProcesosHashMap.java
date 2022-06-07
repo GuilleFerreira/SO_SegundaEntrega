@@ -22,6 +22,7 @@ public class ContenedorProcesosHashMap {
     public void agregarProceso(int prioridad, long tiempoParaFinalizar){
         try{
             Proceso procesoParaAgregar = new Proceso(contadorParaId, prioridad, tiempoParaFinalizar);
+            procesoParaAgregar.tiempoCuandoSeCreo = System.currentTimeMillis();
             mapa.put(procesoParaAgregar.ID, procesoParaAgregar);
             contadorParaId++;// Hace que cada proceso tenga un id único.
         }catch(Exception e){
@@ -32,6 +33,7 @@ public class ContenedorProcesosHashMap {
     public void iterarSobreProcesos(){
         Proceso procesoConMasPrioridad;
         int maxPrioridad = 99;
+        Proceso procesoParaEliminar = null;
         for(Proceso p : mapa.values()){
             // Se recorre quedandose con el proceso de prioridad más alta si no está en ejecución o bloqueado.
             if((p.prioridad <= maxPrioridad) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
@@ -44,7 +46,7 @@ public class ContenedorProcesosHashMap {
             if(!p.bloqueadoPorES && !p.bloqueadoPorUsuario && !p.enEjecucion){
                 //Cuidado con overflow del float.
                 //El tiempo esperando es el tiempo que lleva el programa corriendo.
-                p.tiempoEsperando = System.currentTimeMillis();//el tiempo que está esperando un proceso a su tiempo que realmente lleva esperando.
+                p.tiempoEsperando = System.currentTimeMillis() - p.tiempoCuandoSeCreo;//el tiempo que está esperando un proceso a su tiempo que realmente lleva esperando.
             }
             
             /*ModificarPrioridad
@@ -56,7 +58,17 @@ public class ContenedorProcesosHashMap {
                 p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
                 p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
             }
+            
+            //Cuando un proceso ya terminó según su tiempo para finalizar.
+            if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
+                procesoParaEliminar = p;
+            }
+            
+            //Por prioridad sacar a los procesos de estado bloqueado cuando haya pasado su tiempo.
         }
+        //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
+        //Al final del loop, acá
+        eliminarProceso(procesoParaEliminar.ID);
         //De alguna forma usar mandar al proceso a usar cpu. EN ESTA LINEA, hacer al procesador Singleton sería buena idea, sino hacer a Procesador static, o usar una clase ContenedorPrograma singleton, que contega al procesador y a este contenedor, y ahí referirme al procesador y usarCpu.
     }
     

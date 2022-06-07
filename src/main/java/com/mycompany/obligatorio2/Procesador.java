@@ -11,11 +11,21 @@ package com.mycompany.obligatorio2;
 public class Procesador {
     public Proceso procesoActual;
     public long tiempoCorriendoUnProceso;
+    public long tiempoActualCuandoEntraProcesoEnCpu;
+    public long tiempoActualCuandoDejaProcesoACpu;
     
     public void usarCpu(Proceso p){
         procesoActual = p;
         procesoActual.enEjecucion = true;
-        procesoActual.tiempoEnCpu = System.currentTimeMillis();//Cuando inicia
+        this.tiempoActualCuandoEntraProcesoEnCpu = System.currentTimeMillis();
+    }
+    
+    public void dejarCpu(){
+        this.tiempoActualCuandoDejaProcesoACpu = System.currentTimeMillis();
+        procesoActual.tiempoEnCpu += this.tiempoActualCuandoDejaProcesoACpu - this.tiempoActualCuandoEntraProcesoEnCpu;//El tiempo que estuvo el proceso en cpu, *se usa += ya que sino no se guardaria el tiempo anterior que estuvo en cpu.*
+        //Se setean a 0 los tiempos de la clase Procesador
+        this.tiempoActualCuandoDejaProcesoACpu = 0;
+        this.tiempoActualCuandoEntraProcesoEnCpu = 0;
     }
     /*
     Para sacarlo del cpu hay dos opciones, fijaerme en el contenedorProcesos cuando está iterando, 
