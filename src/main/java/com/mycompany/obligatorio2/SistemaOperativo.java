@@ -14,7 +14,7 @@ public class SistemaOperativo {
     
     public SistemaOperativo(){
         this.procesador = new Procesador();
-        this.contenedor = new ContenedorProcesosHashMap();
+        this.contenedor = new ContenedorProcesosHashMap(procesador);
     }
     
     

@@ -123,7 +123,6 @@ public class ContenedorProcesosHashMap {
             procesoParaEliminar = null;
         }
         agregarProcesos();
-        //De alguna forma usar mandar al proceso a usar cpu. EN ESTA LINEA, hacer al procesador Singleton sería buena idea, sino hacer a Procesador static, o usar una clase ContenedorPrograma singleton, que contega al procesador y a este contenedor, y ahí referirme al procesador y usarCpu.
     }
     
     public void eliminarProceso(Integer id){
