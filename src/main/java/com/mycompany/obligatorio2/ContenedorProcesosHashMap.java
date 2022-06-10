@@ -12,26 +12,39 @@ import java.util.LinkedList;
  * @author inazu
  */
 public class ContenedorProcesosHashMap {
-    public HashMap<Integer, Proceso> mapa = new HashMap();
-    public Integer contadorParaId = 0;
+    public HashMap<Integer, Proceso> mapa;
+    public Integer contadorParaId;
+    public LinkedList<Proceso> procesosParaInsertar;
+    public boolean cargarProcesos;
+    public Integer procesoParaBloquearID;
+    public Integer procesoParaDesbloquearID;
+    public Procesador CPU;
+    
+    
+    public ContenedorProcesosHashMap(Procesador cpu){
+        this.procesosParaInsertar = new LinkedList();
+        this.contadorParaId = 0;
+        this.mapa = new HashMap();
+        this.cargarProcesos = false;
+        this.CPU = cpu;
+    }
     
     public Proceso buscarProceso(Integer id){
         return mapa.get(id);
     }
     
-    public void agregarProceso(int prioridad, long tiempoParaFinalizar){
-        try{
-            Proceso procesoParaAgregar = new Proceso(contadorParaId, prioridad, tiempoParaFinalizar);
-            procesoParaAgregar.tiempoCuandoSeCreo = System.currentTimeMillis();
-            mapa.put(procesoParaAgregar.ID, procesoParaAgregar);
-            contadorParaId++;// Hace que cada proceso tenga un id único.
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+    public void agregarProcesos(){
+        if(cargarProcesos){
+            for(Proceso p : procesosParaInsertar){
+                mapa.put(p.ID, p);
+            }
         }
+        cargarProcesos = false;
     }
     
+    
     public void iterarSobreProcesos(){
-        Proceso procesoConMasPrioridad;
+        Proceso procesoConMasPrioridad = null;
         int maxPrioridad = 99;
         Proceso procesoParaEliminar = null;
         for(Proceso p : mapa.values()){
@@ -41,6 +54,7 @@ public class ContenedorProcesosHashMap {
                 procesoConMasPrioridad = p;
             }
             
+            //Envcejecimiento
             //Me aseguro que solo cuente el tiempo esperando cuando NO está bloqueado NI en ejecución.
             //Ya que si tiene mucha E/S siempre será prioritario si no hiciesemos esto.
             if(!p.bloqueadoPorES && !p.bloqueadoPorUsuario && !p.enEjecucion){
@@ -61,14 +75,54 @@ public class ContenedorProcesosHashMap {
             
             //Cuando un proceso ya terminó según su tiempo para finalizar.
             if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
+                p.enEjecucion = false;
                 procesoParaEliminar = p;
             }
             
+            
+            //Entrada y salida
+            if(p.enEjecucion && (p.tiempoTemporalEnCpu >= p.intervaloES)){
+                this.CPU.dejarCpu();
+                p.tiempoCuandoSeBloqueoPorES = System.currentTimeMillis();
+                p.bloqueadoPorES = true;
+                if(!p.equals(procesoConMasPrioridad)){
+                    this.CPU.usarCpu(procesoConMasPrioridad);
+                }
+            }
+            
+            if(p.bloqueadoPorES){
+                //Si el tiempo que estuvo en entrada salida es mayor o igual al que debe estar en ES, lo desbloqueo
+                long tiempoQueEstuvoBloqueadoPorES = System.currentTimeMillis() - p.tiempoCuandoSeBloqueoPorES;
+                if(tiempoQueEstuvoBloqueadoPorES >= p.tiempoEnES){
+                    p.bloqueadoPorES = false;
+                    p.tiempoTemporalEnCpu = 0;
+                }  
+            }
+            
+            
+            if(p.ID == procesoParaBloquearID){
+                p.bloqueadoPorUsuario = true;
+            }
+            
+            if(p.ID == procesoParaDesbloquearID){
+                p.bloqueadoPorUsuario = false;
+            }
+            
+            
             //Por prioridad sacar a los procesos de estado bloqueado cuando haya pasado su tiempo.
+        }
+        
+        
+        if(procesoConMasPrioridad != null){
+            this.CPU.usarCpu(procesoConMasPrioridad);
         }
         //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
         //Al final del loop, acá, eliminar los procesos de esa lista.
-        eliminarProceso(procesoParaEliminar.ID);
+        if(procesoParaEliminar != null){
+            eliminarProceso(procesoParaEliminar.ID);
+            procesoParaEliminar = null;
+        }
+        agregarProcesos();
         //De alguna forma usar mandar al proceso a usar cpu. EN ESTA LINEA, hacer al procesador Singleton sería buena idea, sino hacer a Procesador static, o usar una clase ContenedorPrograma singleton, que contega al procesador y a este contenedor, y ahí referirme al procesador y usarCpu.
     }
     

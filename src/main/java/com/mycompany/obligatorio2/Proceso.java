@@ -4,6 +4,8 @@
  */
 package com.mycompany.obligatorio2;
 
+import java.util.Objects;
+
 /**
  *
  * @author inazu
@@ -20,19 +22,52 @@ public class Proceso {
     
     public int prioridad;
     public Integer ID;
+    public boolean esDeUsuario;
+    public long intervaloES;
+    public long tiempoEnES;
+    
     public boolean bloqueadoPorES;
     public boolean bloqueadoPorUsuario;
     public boolean enEjecucion;
     public long tiempoCuandoSeCreo;
     
-    public Proceso(Integer id, int prioridad, long tiempoParaFinalizar) throws Exception{
+    public long tiempoTemporalEnCpu;
+    public long tiempoCuandoSeBloqueoPorES;
+    
+    
+    
+    public Proceso(Integer id, int prioridad, boolean esDeUsuario, long tiempoParaFinalizar, long intervaloES, long tiempoEnES) throws Exception{
         if(prioridad < 1 || prioridad > 99){
             throw new Exception("Prioridad incorrecta");
         }else{
             this.prioridad = prioridad;
             this.tiempoEsperando = 0;
             this.tiempoQueDebeEstarEnCPUparaFinalizar = tiempoParaFinalizar;
+            this.tiempoEnES = tiempoEnES;
+            this.intervaloES = intervaloES;
+            this.esDeUsuario = esDeUsuario;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Proceso other = (Proceso) obj;
+        return Objects.equals(this.ID, other.ID);
     }
     
     

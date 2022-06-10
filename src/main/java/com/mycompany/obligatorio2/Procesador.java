@@ -23,9 +23,20 @@ public class Procesador {
     public void dejarCpu(){
         this.tiempoActualCuandoDejaProcesoACpu = System.currentTimeMillis();
         procesoActual.tiempoEnCpu += this.tiempoActualCuandoDejaProcesoACpu - this.tiempoActualCuandoEntraProcesoEnCpu;//El tiempo que estuvo el proceso en cpu, *se usa += ya que sino no se guardaria el tiempo anterior que estuvo en cpu.*
+        procesoActual.tiempoTemporalEnCpu = procesoActual.tiempoEnCpu;
         //Se setean a 0 los tiempos de la clase Procesador
         this.tiempoActualCuandoDejaProcesoACpu = 0;
         this.tiempoActualCuandoEntraProcesoEnCpu = 0;
+        
+        //cambio de prioridad del proceso actual
+        if(procesoActual.prioridad <= 84){
+            procesoActual.prioridad += 15;
+        }else{
+            procesoActual.prioridad = 99;
+        }
+        
+        //El proceso actual deja de estar en ejecucion
+        this.procesoActual.enEjecucion = false;//Deja de estar en ejecución.
     }
     /*
     Para sacarlo del cpu hay dos opciones, fijaerme en el contenedorProcesos cuando está iterando, 

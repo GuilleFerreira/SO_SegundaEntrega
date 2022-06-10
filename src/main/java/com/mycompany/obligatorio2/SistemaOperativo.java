@@ -17,9 +17,38 @@ public class SistemaOperativo {
         this.contenedor = new ContenedorProcesosHashMap();
     }
     
-    public void agregarProceso(String prioridad, String tiempoParaFinalizar){
+    
+    //boton crear Proceso
+    public void crearProceso(String id, String prioridad, String DeUsuario, String tiempoParaFinalizar, String intervaloES, String tiempoEnES){
+        Integer ID = Integer.parseInt(id);
         int prioridadInt = Integer.parseInt(prioridad);
+        boolean esDeUsuario = (DeUsuario.compareTo("Usuario") == 0);
         long tiempoParaFinalizarLong = Long.parseLong(tiempoParaFinalizar);
-        this.contenedor.agregarProceso(prioridadInt, tiempoParaFinalizarLong);
+        long intervaloESlong = Long.parseLong(intervaloES);
+        long tiempoEnESlong = Long.parseLong(tiempoEnES);
+        try{
+            Proceso procesoNuevo = new Proceso(ID, prioridadInt, esDeUsuario, tiempoParaFinalizarLong, intervaloESlong, tiempoEnESlong);
+            this.contenedor.procesosParaInsertar.add(procesoNuevo);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+    }
+    
+    //boton cargar Procesos
+    public void cargarProcesos(){
+        contenedor.cargarProcesos = true;
+    }
+    
+    //boton bloquear
+    public void bloquearProceso(String id){
+        Integer ID = Integer.parseInt(id);
+        contenedor.procesoParaBloquearID = ID;
+    }
+    
+    //boton desbloquear
+    public void desbloquearProceso(String id){
+        Integer ID = Integer.parseInt(id);
+        contenedor.procesoParaDesbloquearID = ID;
     }
 }
