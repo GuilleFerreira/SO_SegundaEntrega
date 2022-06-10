@@ -12,8 +12,8 @@ public class SistemaOperativo {
     public Procesador procesador;
     public ContenedorProcesosHashMap contenedor;
     
-    public SistemaOperativo(){
-        this.procesador = new Procesador();
+    public SistemaOperativo(long tiempoCPU){
+        this.procesador = new Procesador(tiempoCPU);
         this.contenedor = new ContenedorProcesosHashMap(procesador);
     }
     
@@ -50,5 +50,17 @@ public class SistemaOperativo {
     public void desbloquearProceso(String id){
         Integer ID = Integer.parseInt(id);
         contenedor.procesoParaDesbloquearID = ID;
+    }
+    
+    public String enCPU(){
+        if (procesador.procesoActual != null){
+            return procesador.procesoActual.ID.toString();
+        }else{
+            return "No hay procesos en CPU";
+        }
+    }
+    
+    public void Iniciar(){
+        this.contenedor.iterarSobreProcesos();
     }
 }
