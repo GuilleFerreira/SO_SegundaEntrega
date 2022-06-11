@@ -15,6 +15,7 @@ public class Obligatorio2 {
         System.out.println("Hello World!");
         Procesador p;
         Proceso proceso;
+        System.out.println(System.currentTimeMillis());
         
         /*
         Un objeto Procesador, que contenga un objeto proceso y otros atributos

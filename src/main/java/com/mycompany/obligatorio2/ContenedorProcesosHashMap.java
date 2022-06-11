@@ -38,8 +38,9 @@ public class ContenedorProcesosHashMap {
             for(Proceso p : procesosParaInsertar){
                 mapa.put(p.ID, p);
             }
+            cargarProcesos = false;
+            procesosParaInsertar = new LinkedList();
         }
-        cargarProcesos = false;
     }
     
     
@@ -48,6 +49,11 @@ public class ContenedorProcesosHashMap {
         int maxPrioridad = 99;
         Proceso procesoParaEliminar = null;
         for(Proceso p : mapa.values()){
+            if(p.enEjecucion){
+                p.tiempoEnCpu += System.currentTimeMillis() - CPU.tiempoActualCuandoEntraProcesoEnCpu;
+            }
+            
+            //System.out.println(p.ID + " " + p.tiempoEnCpu + " " + p.tiempoTemporalEnCpu);
             // Se recorre quedandose con el proceso de prioridad más alta si no está en ejecución o bloqueado.
             if((p.prioridad <= maxPrioridad) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
                 maxPrioridad = p.prioridad;
@@ -76,6 +82,7 @@ public class ContenedorProcesosHashMap {
             //Cuando un proceso ya terminó según su tiempo para finalizar.
             if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
                 p.enEjecucion = false;
+                this.CPU.dejarCpu();
                 procesoParaEliminar = p;
             }
             
@@ -86,10 +93,19 @@ public class ContenedorProcesosHashMap {
                 p.tiempoCuandoSeBloqueoPorES = System.currentTimeMillis();
                 p.bloqueadoPorES = true;
                 if(!p.equals(procesoConMasPrioridad)){
-                    this.CPU.usarCpu(procesoConMasPrioridad);
+                    if (this.CPU.libre){
+                        this.CPU.usarCpu(procesoConMasPrioridad);
+                    }
                 }
             }
             
+            //Respeta tiempo cpu
+            if (p.enEjecucion && (p.tiempoTemporalEnCpu >= this.CPU.tiempoPorProceso)){
+                p.enEjecucion = false;
+                this.CPU.dejarCpu();
+                p.tiempoTemporalEnCpu = 0;
+            }
+
             if(p.bloqueadoPorES){
                 //Si el tiempo que estuvo en entrada salida es mayor o igual al que debe estar en ES, lo desbloqueo
                 long tiempoQueEstuvoBloqueadoPorES = System.currentTimeMillis() - p.tiempoCuandoSeBloqueoPorES;
@@ -113,16 +129,18 @@ public class ContenedorProcesosHashMap {
         }
         
         
-        if(procesoConMasPrioridad != null){
-            this.CPU.usarCpu(procesoConMasPrioridad);
-        }
-        //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
-        //Al final del loop, acá, eliminar los procesos de esa lista.
-        if(procesoParaEliminar != null){
-            eliminarProceso(procesoParaEliminar.ID);
-            procesoParaEliminar = null;
-        }
-        agregarProcesos();
+            if(procesoConMasPrioridad != null){
+                if (this.CPU.libre){
+                    this.CPU.usarCpu(procesoConMasPrioridad);
+                }
+            }
+            //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
+            //Al final del loop, acá, eliminar los procesos de esa lista.
+            if(procesoParaEliminar != null){
+                eliminarProceso(procesoParaEliminar.ID);
+                procesoParaEliminar = null;
+            }
+            agregarProcesos();
     }
     
     public void eliminarProceso(Integer id){

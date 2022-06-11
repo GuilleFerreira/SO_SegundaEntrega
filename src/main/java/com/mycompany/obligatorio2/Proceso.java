@@ -40,6 +40,7 @@ public class Proceso {
         if(prioridad < 1 || prioridad > 99){
             throw new Exception("Prioridad incorrecta");
         }else{
+            this.ID = id;
             this.prioridad = prioridad;
             this.tiempoEsperando = 0;
             this.tiempoQueDebeEstarEnCPUparaFinalizar = tiempoParaFinalizar;
