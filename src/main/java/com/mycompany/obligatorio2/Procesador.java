@@ -32,7 +32,7 @@ public class Procesador {
     public void dejarCpu(){
         this.tiempoActualCuandoDejaProcesoACpu = System.currentTimeMillis();
         //procesoActual.tiempoEnCpu += this.tiempoActualCuandoDejaProcesoACpu - this.tiempoActualCuandoEntraProcesoEnCpu;//El tiempo que estuvo el proceso en cpu, *se usa += ya que sino no se guardaria el tiempo anterior que estuvo en cpu.*
-        procesoActual.tiempoTemporalEnCpu = procesoActual.tiempoEnCpu;
+        procesoActual.tiempoTemporalEnCpu = 0;
         //Se setean a 0 los tiempos de la clase Procesador
         this.tiempoActualCuandoDejaProcesoACpu = 0;
         this.tiempoActualCuandoEntraProcesoEnCpu = 0;
