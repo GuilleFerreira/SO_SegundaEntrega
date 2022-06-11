@@ -70,7 +70,12 @@ public class Manejador extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        TiempoCPU.setText("1000000");
+        TiempoCPU.setText("5000");
+        TiempoCPU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TiempoCPUActionPerformed(evt);
+            }
+        });
 
         CrearCPU.setText("jButton1");
         CrearCPU.addActionListener(new java.awt.event.ActionListener() {
@@ -116,11 +121,16 @@ public class Manejador extends javax.swing.JFrame {
 
         PTipoProceso.setText("1");
 
-        PTFinalizar.setText("1000000");
+        PTFinalizar.setText("10000");
+        PTFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PTFinalizarActionPerformed(evt);
+            }
+        });
 
-        PIntervaloES.setText("1000000");
+        PIntervaloES.setText("8000");
 
-        PTiempoES.setText("1");
+        PTiempoES.setText("1000");
 
         BotonCrearProceso.setText("crear");
         BotonCrearProceso.addActionListener(new java.awt.event.ActionListener() {
@@ -284,6 +294,14 @@ public class Manejador extends javax.swing.JFrame {
     private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
         timer2.start();
     }//GEN-LAST:event_iniciarActionPerformed
+
+    private void TiempoCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TiempoCPUActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TiempoCPUActionPerformed
+
+    private void PTFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PTFinalizarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PTFinalizarActionPerformed
 
     /**
      * @param args the command line arguments

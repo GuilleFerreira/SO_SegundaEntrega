@@ -22,6 +22,7 @@ public class Procesador {
     }
     
     public void usarCpu(Proceso p){
+        System.out.println("Entra a CPU ------ " + p.ID +" priroridad: " + p.prioridad + " Con tiempo total de ejecución: " + p.tiempoEnCpu);
         libre = false;
         procesoActual = p;
         System.out.println(procesoActual.ID);
@@ -30,12 +31,14 @@ public class Procesador {
     }
     
     public void dejarCpu(){
+        System.out.println("Deja CPU: " + procesoActual.ID + " con tiempo de ejecucion: " + procesoActual.tiempoEnCpu);
         this.tiempoActualCuandoDejaProcesoACpu = System.currentTimeMillis();
         //procesoActual.tiempoEnCpu += this.tiempoActualCuandoDejaProcesoACpu - this.tiempoActualCuandoEntraProcesoEnCpu;//El tiempo que estuvo el proceso en cpu, *se usa += ya que sino no se guardaria el tiempo anterior que estuvo en cpu.*
         procesoActual.tiempoTemporalEnCpu = 0;
         //Se setean a 0 los tiempos de la clase Procesador
         this.tiempoActualCuandoDejaProcesoACpu = 0;
         this.tiempoActualCuandoEntraProcesoEnCpu = 0;
+        procesoActual.tiempoEnCpuAux = procesoActual.tiempoEnCpu;//Importante
         
         //cambio de prioridad del proceso actual
         if(procesoActual.prioridad <= 84){

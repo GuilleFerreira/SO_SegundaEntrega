@@ -18,6 +18,7 @@ public class Proceso {
     este se actualiza.
     */
     public long tiempoEsperando;
+    public long tiempoAuxEsperando;
     public long tiempoQueDebeEstarEnCPUparaFinalizar;
     
     public int prioridad;
@@ -32,7 +33,9 @@ public class Proceso {
     public long tiempoCuandoSeCreo;
     
     public long tiempoTemporalEnCpu;
+    public long tiempoTemporalEnCpuAuxiliar;
     public long tiempoCuandoSeBloqueoPorES;
+    public long tiempoEnCpuAux;
     
     
     
