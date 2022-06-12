@@ -54,11 +54,40 @@ public class SistemaOperativo {
     
     public String enCPU(){
         if (procesador.procesoActual != null){
-            return procesador.procesoActual.ID.toString();
+            String procesoID = procesador.procesoActual.ID.toString();
+            String procesoPrioridad = procesador.procesoActual.prioridad + "";
+            String procesoSOoUser = "SO";
+            if (procesador.procesoActual.esDeUsuario == true){
+                procesoSOoUser = "Usuario";
+            }
+            String procesoTiempoEnCPU = String.valueOf(procesador.procesoActual.tiempoEnCpu);
+            String procesoTiempoMaxEnCPU = String.valueOf(procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar);
+            String procesoIntervaloES = String.valueOf(procesador.procesoActual.intervaloES);
+            String procesoTiempoES = String.valueOf(procesador.procesoActual.tiempoEnES);
+            String InfoProceso = "ID: " + procesoID + " Prioridad: " + procesoPrioridad + " Proceso de: " + procesoSOoUser
+                                + " Tiempo en CPU: " + procesoTiempoEnCPU + "/" + procesoTiempoMaxEnCPU + " Intervalo de ES: " +
+                                procesoIntervaloES + " Tiempo ES: " + procesoTiempoES;
+            return InfoProceso;
         }else{
             return "No hay procesos en CPU";
         }
     }
+    
+    
+    //PORCENTAJE DE TIEMPO, ESTO SERIA PARA LA GUI EL PORCENTAJE
+    
+    /*
+    public int porcentajeProcesoEnCPU(){
+        if (procesador.procesoActual != null){
+            int porcentaje;
+            long division = procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar;
+            porcentaje = (int) (division * 100);
+            return porcentaje;
+        }else{
+            return 0;
+        }
+    }
+    */
     
     public void Iniciar(){
         this.contenedor.iterarSobreProcesos();
