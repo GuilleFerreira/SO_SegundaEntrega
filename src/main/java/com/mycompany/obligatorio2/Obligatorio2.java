@@ -13,9 +13,8 @@ public class Obligatorio2 {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
-        Procesador p;
-        Proceso proceso;
-        System.out.println(System.currentTimeMillis());
+        Inicio ini = new Inicio();
+        ini.setVisible(true);
         
         /*
         Un objeto Procesador, que contenga un objeto proceso y otros atributos

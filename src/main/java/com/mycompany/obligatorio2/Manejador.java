@@ -19,22 +19,29 @@ public class Manejador extends javax.swing.JFrame {
     DefaultListModel ListaAgregar = new DefaultListModel();
     public final static int INTERVAL = 10;
     public final static int INTERVAL2 = 1;
+    public long tiempo;
+    
     /**
      * Creates new form Manejador
+     * @param tiempo
      */
-    public Manejador() {
+    public Manejador(long tiempo) {
+        this.tiempo = tiempo;
         initComponents();
+        SO = new SistemaOperativo(tiempo);
+        timerIniciar.start();
+        ListaAgregar.clear();
+        jList1.setModel(ListaAgregar);
     }
 
     
     Timer timer = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
-
-       enCPU2.setText(SO.enCPU());
+        enCPU2.setText(SO.enCPU());
         }    
     });
     
-    Timer timer2 = new Timer(INTERVAL2, new ActionListener() {
+    Timer timerIniciar = new Timer(INTERVAL2, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
         SO.Iniciar();
         }    
@@ -48,145 +55,46 @@ public class Manejador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        TiempoCPU = new javax.swing.JTextField();
-        CrearCPU = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        PanelVerde = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        PidProceso = new javax.swing.JTextField();
-        PPrioridad = new javax.swing.JTextField();
-        PTipoProceso = new javax.swing.JTextField();
-        PTFinalizar = new javax.swing.JTextField();
-        PIntervaloES = new javax.swing.JTextField();
-        PTiempoES = new javax.swing.JTextField();
-        BotonCrearProceso = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        BotonCargarProcesos = new javax.swing.JButton();
+        PidProceso = new javax.swing.JTextField();
+        BotonCrearProceso = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        Texto_ID = new javax.swing.JLabel();
+        PPrioridad = new javax.swing.JComboBox<>();
+        Texto_Prioridad = new javax.swing.JLabel();
+        Texto_TipoProceso = new javax.swing.JLabel();
+        PTipoProceso = new javax.swing.JComboBox<>();
+        Texto_TiempoDeEjecucion = new javax.swing.JLabel();
+        PTFinalizar = new javax.swing.JTextField();
+        Texto_IntervaloES = new javax.swing.JLabel();
+        PIntervaloES = new javax.swing.JTextField();
+        Texto_TiempoES = new javax.swing.JLabel();
+        PTiempoES = new javax.swing.JTextField();
+        PIntervaloES1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        porcentaje = new javax.swing.JLabel();
         enCPU2 = new javax.swing.JLabel();
-        iniciar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        TiempoCPU.setText("5000");
-        TiempoCPU.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TiempoCPUActionPerformed(evt);
-            }
-        });
+        PanelVerde.setBackground(new java.awt.Color(3, 68, 46));
+        PanelVerde.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        CrearCPU.setText("jButton1");
-        CrearCPU.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearCPUActionPerformed(evt);
-            }
-        });
+        jLabel2.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Creador de Procesos");
+        PanelVerde.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, -1, -1));
 
-        jLabel1.setText("CPU");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(TiempoCPU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(CrearCPU)
-                .addGap(29, 29, 29))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CrearCPU)
-                    .addComponent(TiempoCPU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
-
-        jLabel2.setText("Creador PROCESOS");
-
-        PidProceso.setText("1");
-
-        PPrioridad.setText("1");
-
-        PTipoProceso.setText("1");
-
-        PTFinalizar.setText("10000");
-        PTFinalizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PTFinalizarActionPerformed(evt);
-            }
-        });
-
-        PIntervaloES.setText("8000");
-
-        PTiempoES.setText("1000");
-
-        BotonCrearProceso.setText("crear");
-        BotonCrearProceso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BotonCrearProcesoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(PidProceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(PPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(PTipoProceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(81, 81, 81)
-                                .addComponent(PIntervaloES, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(PTiempoES, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BotonCrearProceso)
-                            .addComponent(PTFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(76, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PidProceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PTipoProceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PTFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(PIntervaloES, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PTiempoES, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BotonCrearProceso))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-
+        jList1.setBackground(new java.awt.Color(3, 100, 46));
+        jList1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        jList1.setForeground(new java.awt.Color(255, 255, 255));
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -194,110 +102,163 @@ public class Manejador extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jLabel3.setText("Lista Para entrar");
+        PanelVerde.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 250, -1));
 
-        jButton1.setText("Mandar a SO");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        BotonCargarProcesos.setBackground(new java.awt.Color(3, 100, 46));
+        BotonCargarProcesos.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        BotonCargarProcesos.setForeground(new java.awt.Color(255, 255, 255));
+        BotonCargarProcesos.setText("Cargar Procesos");
+        BotonCargarProcesos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BotonCargarProcesos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                BotonCargarProcesosActionPerformed(evt);
             }
         });
+        PanelVerde.add(BotonCargarProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, 120, 30));
 
-        enCPU2.setText("jLabel4");
+        PidProceso.setBackground(new java.awt.Color(3, 100, 46));
+        PidProceso.setForeground(new java.awt.Color(255, 255, 255));
+        PidProceso.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        PidProceso.setText("1");
+        PidProceso.setBorder(null);
+        PanelVerde.add(PidProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 110, 30));
 
-        iniciar.setText("inisio");
-        iniciar.addActionListener(new java.awt.event.ActionListener() {
+        BotonCrearProceso.setBackground(new java.awt.Color(3, 100, 46));
+        BotonCrearProceso.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        BotonCrearProceso.setForeground(new java.awt.Color(255, 255, 255));
+        BotonCrearProceso.setText("CREAR");
+        BotonCrearProceso.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BotonCrearProceso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                iniciarActionPerformed(evt);
+                BotonCrearProcesoActionPerformed(evt);
             }
         });
+        PanelVerde.add(BotonCrearProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 130, 30));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(199, 199, 199)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(enCPU2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(iniciar)
-                                        .addGap(135, 135, 135)
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(19, 19, 19)))))
-                        .addGap(14, 14, 14))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(73, 73, 73))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(66, 66, 66))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(iniciar)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(enCPU2)))
-                .addGap(28, 28, 28)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(46, Short.MAX_VALUE))
-        );
+        jLabel3.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Procesos Creados:");
+        PanelVerde.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, -1, -1));
+
+        Texto_ID.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_ID.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_ID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_ID.setText("ID:");
+        Texto_ID.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        PanelVerde.add(Texto_ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 110, 30));
+
+        PPrioridad.setBackground(new java.awt.Color(3, 100, 46));
+        PPrioridad.setForeground(new java.awt.Color(255, 255, 255));
+        PPrioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
+        PanelVerde.add(PPrioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 110, 30));
+
+        Texto_Prioridad.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_Prioridad.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_Prioridad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_Prioridad.setText("Prioridad:");
+        PanelVerde.add(Texto_Prioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 50, 110, 30));
+
+        Texto_TipoProceso.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_TipoProceso.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_TipoProceso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_TipoProceso.setText("Tipo de proceso:");
+        PanelVerde.add(Texto_TipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 110, 30));
+
+        PTipoProceso.setBackground(new java.awt.Color(3, 100, 46));
+        PTipoProceso.setForeground(new java.awt.Color(255, 255, 255));
+        PTipoProceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "SO" }));
+        PanelVerde.add(PTipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 110, 30));
+
+        Texto_TiempoDeEjecucion.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_TiempoDeEjecucion.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_TiempoDeEjecucion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_TiempoDeEjecucion.setText("Tiempo de ejec:");
+        PanelVerde.add(Texto_TiempoDeEjecucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 110, 30));
+
+        PTFinalizar.setBackground(new java.awt.Color(3, 100, 46));
+        PTFinalizar.setForeground(new java.awt.Color(255, 255, 255));
+        PTFinalizar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        PTFinalizar.setText("10000");
+        PTFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PTFinalizarActionPerformed(evt);
+            }
+        });
+        PanelVerde.add(PTFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 110, 30));
+
+        Texto_IntervaloES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_IntervaloES.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_IntervaloES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_IntervaloES.setText("Intervalo E/S:");
+        PanelVerde.add(Texto_IntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, 30));
+
+        PIntervaloES.setBackground(new java.awt.Color(153, 153, 153));
+        PIntervaloES.setForeground(new java.awt.Color(0, 0, 0));
+        PIntervaloES.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        PIntervaloES.setText("ID");
+        PIntervaloES.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        PanelVerde.add(PIntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, 100, 20));
+
+        Texto_TiempoES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
+        Texto_TiempoES.setForeground(new java.awt.Color(255, 255, 255));
+        Texto_TiempoES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Texto_TiempoES.setText("Tiempo E/S:");
+        PanelVerde.add(Texto_TiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 110, 30));
+
+        PTiempoES.setBackground(new java.awt.Color(3, 100, 46));
+        PTiempoES.setForeground(new java.awt.Color(255, 255, 255));
+        PTiempoES.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        PTiempoES.setText("1000");
+        PanelVerde.add(PTiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 110, 30));
+
+        PIntervaloES1.setBackground(new java.awt.Color(3, 100, 46));
+        PIntervaloES1.setForeground(new java.awt.Color(255, 255, 255));
+        PIntervaloES1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        PIntervaloES1.setText("8000");
+        PanelVerde.add(PIntervaloES1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 110, 30));
+
+        jButton1.setBackground(new java.awt.Color(255, 51, 51));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Bloquear");
+        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        PanelVerde.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 540, 110, 20));
+
+        jButton2.setBackground(new java.awt.Color(255, 51, 51));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Desbloquear");
+        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        PanelVerde.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 540, 100, 20));
+
+        getContentPane().add(PanelVerde, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 350, 580));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        porcentaje.setForeground(new java.awt.Color(0, 0, 0));
+        porcentaje.setText("Porcentaje");
+        jPanel3.add(porcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+
+        enCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU2.setText("                                                                                                                                                                                                                    ");
+        jPanel3.add(enCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 580));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CrearCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearCPUActionPerformed
-        long t = Long.parseLong(TiempoCPU.getText());
-        SO = new SistemaOperativo(t);
-    }//GEN-LAST:event_CrearCPUActionPerformed
-
     private void BotonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearProcesoActionPerformed
-        SO.crearProceso(PidProceso.getText(), PPrioridad.getText(), PTipoProceso.getText(), PTFinalizar.getText(), PIntervaloES.getText(), PTiempoES.getText());
-        
+        SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES.getText(), PTiempoES.getText());
         ListaAgregar.addElement(PidProceso.getText());
         jList1.setModel(ListaAgregar);
     }//GEN-LAST:event_BotonCrearProcesoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void BotonCargarProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarProcesosActionPerformed
         SO.cargarProcesos();
         timer.start();
         ListaAgregar.clear();
         jList1.setModel(ListaAgregar);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
-        timer2.start();
-    }//GEN-LAST:event_iniciarActionPerformed
-
-    private void TiempoCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TiempoCPUActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TiempoCPUActionPerformed
+    }//GEN-LAST:event_BotonCargarProcesosActionPerformed
 
     private void PTFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PTFinalizarActionPerformed
         // TODO add your handling code here:
@@ -332,34 +293,40 @@ public class Manejador extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Manejador().setVisible(true);
+                new Manejador(1).setVisible(true);
             }
         });
     }
     
-    public void Texto(){
-        enCPU2.setText(SO.enCPU());
+    public void Setup(){
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonCargarProcesos;
     private javax.swing.JButton BotonCrearProceso;
-    private javax.swing.JButton CrearCPU;
     private javax.swing.JTextField PIntervaloES;
-    private javax.swing.JTextField PPrioridad;
+    private javax.swing.JTextField PIntervaloES1;
+    private javax.swing.JComboBox<String> PPrioridad;
     private javax.swing.JTextField PTFinalizar;
     private javax.swing.JTextField PTiempoES;
-    private javax.swing.JTextField PTipoProceso;
+    private javax.swing.JComboBox<String> PTipoProceso;
+    private javax.swing.JPanel PanelVerde;
     private javax.swing.JTextField PidProceso;
-    private javax.swing.JTextField TiempoCPU;
+    private javax.swing.JLabel Texto_ID;
+    private javax.swing.JLabel Texto_IntervaloES;
+    private javax.swing.JLabel Texto_Prioridad;
+    private javax.swing.JLabel Texto_TiempoDeEjecucion;
+    private javax.swing.JLabel Texto_TiempoES;
+    private javax.swing.JLabel Texto_TipoProceso;
     private javax.swing.JLabel enCPU2;
-    private javax.swing.JButton iniciar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel porcentaje;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,7 @@ public class Proceso {
     public long tiempoEnCpu;
  
     /*
-    Empeiza cuando se crea el proceso, cada vez que se recorre la lista de procesos,
+    Empieza cuando se crea el proceso, cada vez que se recorre la lista de procesos,
     este se actualiza.
     */
     public long tiempoEsperando;
