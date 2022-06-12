@@ -6,6 +6,8 @@ package com.mycompany.obligatorio2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 
@@ -30,6 +32,7 @@ public class Manejador extends javax.swing.JFrame {
         initComponents();
         SO = new SistemaOperativo(tiempo);
         timerIniciar.start();
+        timer.start();
         ListaAgregar.clear();
         jList1.setModel(ListaAgregar);
     }
@@ -37,7 +40,17 @@ public class Manejador extends javax.swing.JFrame {
     
     Timer timer = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
-        enCPU2.setText(SO.enCPU());
+        String[] info = SO.enCPU();
+        PAid.setText(info[0]);
+        PAprioridad.setText(info[1]);
+        PAtipo.setText(info[2]);
+        PAtiempoencpu.setText(info[3]);
+        PAintervalo.setText(info[4]);
+        PAtiempoES.setText(info[5]);
+        String p = info[6];
+        int porcentaje = Integer.parseInt(p);
+        //System.out.println("porcentaje " + porcentaje);
+        jProgressBar1.setValue(porcentaje);
         }    
     });
     
@@ -78,8 +91,26 @@ public class Manejador extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        porcentaje = new javax.swing.JLabel();
         enCPU2 = new javax.swing.JLabel();
+        PAid = new javax.swing.JLabel();
+        PAprioridad = new javax.swing.JLabel();
+        enCPU3 = new javax.swing.JLabel();
+        PAtipo = new javax.swing.JLabel();
+        enCPU4 = new javax.swing.JLabel();
+        PAtiempoencpu = new javax.swing.JLabel();
+        enCPU5 = new javax.swing.JLabel();
+        PAintervalo = new javax.swing.JLabel();
+        enCPU6 = new javax.swing.JLabel();
+        PAtiempoES = new javax.swing.JLabel();
+        enCPU7 = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaBloqueados = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TablaEnCola = new javax.swing.JTable();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -234,13 +265,110 @@ public class Manejador extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        porcentaje.setForeground(new java.awt.Color(0, 0, 0));
-        porcentaje.setText("Porcentaje");
-        jPanel3.add(porcentaje, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
-
+        enCPU2.setFont(new java.awt.Font("HP Simplified Hans", 1, 24)); // NOI18N
         enCPU2.setForeground(new java.awt.Color(0, 0, 0));
-        enCPU2.setText("                                                                                                                                                                                                                    ");
-        jPanel3.add(enCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
+        enCPU2.setText("PROCESO ACTUAL:");
+        jPanel3.add(enCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        PAid.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 24)); // NOI18N
+        PAid.setForeground(new java.awt.Color(0, 0, 0));
+        PAid.setText("jLabel1");
+        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 270, 30));
+
+        PAprioridad.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
+        PAprioridad.setForeground(new java.awt.Color(0, 0, 0));
+        PAprioridad.setText("jLabel1");
+        jPanel3.add(PAprioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 230, 30));
+
+        enCPU3.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        enCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU3.setText("Prioridad:");
+        jPanel3.add(enCPU3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, 30));
+
+        PAtipo.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
+        PAtipo.setForeground(new java.awt.Color(0, 0, 0));
+        PAtipo.setText("jLabel1");
+        jPanel3.add(PAtipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 210, 30));
+
+        enCPU4.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        enCPU4.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU4.setText("Tipo de proceso:");
+        jPanel3.add(enCPU4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 30));
+
+        PAtiempoencpu.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
+        PAtiempoencpu.setForeground(new java.awt.Color(0, 0, 0));
+        PAtiempoencpu.setText("jLabel1");
+        jPanel3.add(PAtiempoencpu, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 240, 30));
+
+        enCPU5.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        enCPU5.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU5.setText("Tiempo en CPU:");
+        jPanel3.add(enCPU5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 30));
+
+        PAintervalo.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
+        PAintervalo.setForeground(new java.awt.Color(0, 0, 0));
+        PAintervalo.setText("jLabel1");
+        jPanel3.add(PAintervalo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 230, 30));
+
+        enCPU6.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        enCPU6.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU6.setText("Intervalo E/S:");
+        jPanel3.add(enCPU6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, 30));
+
+        PAtiempoES.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
+        PAtiempoES.setForeground(new java.awt.Color(0, 0, 0));
+        PAtiempoES.setText("jLabel1");
+        jPanel3.add(PAtiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 240, 30));
+
+        enCPU7.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
+        enCPU7.setForeground(new java.awt.Color(0, 0, 0));
+        enCPU7.setText("Tiempo E/S:");
+        jPanel3.add(enCPU7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, 30));
+
+        jProgressBar1.setBackground(new java.awt.Color(153, 153, 153));
+        jProgressBar1.setForeground(new java.awt.Color(0, 102, 0));
+        jPanel3.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 290, 30));
+
+        TablaBloqueados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(TablaBloqueados);
+
+        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 300, 260));
+
+        TablaEnCola.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(TablaEnCola);
+
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 300, 260));
+        jPanel3.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 620, -1));
+
+        jLabel1.setFont(new java.awt.Font("HP Simplified Hans", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Procesos bloqueados");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("HP Simplified Hans", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Procesos en cola");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, -1, -1));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 680, 580));
 
@@ -248,7 +376,7 @@ public class Manejador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearProcesoActionPerformed
-        SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES.getText(), PTiempoES.getText());
+        SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES1.getText(), PTiempoES.getText());
         ListaAgregar.addElement(PidProceso.getText());
         jList1.setModel(ListaAgregar);
     }//GEN-LAST:event_BotonCrearProcesoActionPerformed
@@ -305,6 +433,12 @@ public class Manejador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonCargarProcesos;
     private javax.swing.JButton BotonCrearProceso;
+    private javax.swing.JLabel PAid;
+    private javax.swing.JLabel PAintervalo;
+    private javax.swing.JLabel PAprioridad;
+    private javax.swing.JLabel PAtiempoES;
+    private javax.swing.JLabel PAtiempoencpu;
+    private javax.swing.JLabel PAtipo;
     private javax.swing.JTextField PIntervaloES;
     private javax.swing.JTextField PIntervaloES1;
     private javax.swing.JComboBox<String> PPrioridad;
@@ -313,6 +447,8 @@ public class Manejador extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> PTipoProceso;
     private javax.swing.JPanel PanelVerde;
     private javax.swing.JTextField PidProceso;
+    private javax.swing.JTable TablaBloqueados;
+    private javax.swing.JTable TablaEnCola;
     private javax.swing.JLabel Texto_ID;
     private javax.swing.JLabel Texto_IntervaloES;
     private javax.swing.JLabel Texto_Prioridad;
@@ -320,13 +456,23 @@ public class Manejador extends javax.swing.JFrame {
     private javax.swing.JLabel Texto_TiempoES;
     private javax.swing.JLabel Texto_TipoProceso;
     private javax.swing.JLabel enCPU2;
+    private javax.swing.JLabel enCPU3;
+    private javax.swing.JLabel enCPU4;
+    private javax.swing.JLabel enCPU5;
+    private javax.swing.JLabel enCPU6;
+    private javax.swing.JLabel enCPU7;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel porcentaje;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
