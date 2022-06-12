@@ -52,7 +52,8 @@ public class SistemaOperativo {
         contenedor.procesoParaDesbloquearID = ID;
     }
     
-    public String enCPU(){
+    public String[] enCPU(){
+        String InfoProceso[] = new String[7];
         if (procesador.procesoActual != null){
             String procesoID = procesador.procesoActual.ID.toString();
             String procesoPrioridad = procesador.procesoActual.prioridad + "";
@@ -60,16 +61,29 @@ public class SistemaOperativo {
             if (procesador.procesoActual.esDeUsuario == true){
                 procesoSOoUser = "Usuario";
             }
-            String procesoTiempoEnCPU = String.valueOf(procesador.procesoActual.tiempoEnCpu);
-            String procesoTiempoMaxEnCPU = String.valueOf(procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar);
+            long porcentaje = (long)((float) procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar * 100);
+            String procesoTiempoEnCPU = String.valueOf(procesador.procesoActual.tiempoEnCpu) + "/" + String.valueOf(procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar);
             String procesoIntervaloES = String.valueOf(procesador.procesoActual.intervaloES);
             String procesoTiempoES = String.valueOf(procesador.procesoActual.tiempoEnES);
-            String InfoProceso = "ID: " + procesoID + " Prioridad: " + procesoPrioridad + " Proceso de: " + procesoSOoUser
-                                + " Tiempo en CPU: " + procesoTiempoEnCPU + "/" + procesoTiempoMaxEnCPU + " Intervalo de ES: " +
-                                procesoIntervaloES + " Tiempo ES: " + procesoTiempoES;
+            String procesoPorcentaje = porcentaje + "";
+            
+            InfoProceso[0] = procesoID;
+            InfoProceso[1] = procesoPrioridad;
+            InfoProceso[2] = procesoSOoUser;
+            InfoProceso[3] = procesoTiempoEnCPU;
+            InfoProceso[4] = procesoIntervaloES;
+            InfoProceso[5] = procesoTiempoES;
+            InfoProceso[6] = procesoPorcentaje;
             return InfoProceso;
         }else{
-            return "No hay procesos en CPU";
+            InfoProceso[0] = "No hay procesos en CPU";
+            InfoProceso[1] = "No hay procesos en CPU";
+            InfoProceso[2] = "No hay procesos en CPU";
+            InfoProceso[3] = "No hay procesos en CPU";
+            InfoProceso[4] = "No hay procesos en CPU";
+            InfoProceso[5] = "No hay procesos en CPU";
+            InfoProceso[6] = "0";
+            return InfoProceso;
         }
     }
     
@@ -77,18 +91,13 @@ public class SistemaOperativo {
     //PORCENTAJE DE TIEMPO, ESTO SERIA PARA LA GUI EL PORCENTAJE
     
     /*
-    public int porcentajeProcesoEnCPU(){
-        if (procesador.procesoActual != null){
-            int porcentaje;
-            long division = procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar;
-            porcentaje = (int) (division * 100);
-            return porcentaje;
-        }else{
-            return 0;
-        }
+    public long porcentajeProcesoEnCPU(){
+        long porcentaje;
+        long division = procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar;
+        porcentaje = division;
+        return porcentaje;
     }
     */
-    
     public void Iniciar(){
         this.contenedor.iterarSobreProcesos();
     }
