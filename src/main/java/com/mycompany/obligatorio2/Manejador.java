@@ -6,10 +6,10 @@ package com.mycompany.obligatorio2;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,6 +19,10 @@ public class Manejador extends javax.swing.JFrame {
 
     SistemaOperativo SO;
     DefaultListModel ListaAgregar = new DefaultListModel();
+    String[] columnColaCPU = {"ID","Prioridad","Tipo"};
+    String[] columnColaBloqueados = {"ID","Prioridad","Tipo"};
+    DefaultTableModel ModeloTablaColaCPU = new DefaultTableModel(columnColaCPU,1);
+    DefaultTableModel ModeloTablaColaBloqueados = new DefaultTableModel(columnColaBloqueados,1);
     public final static int INTERVAL = 10;
     public final static int INTERVAL2 = 1;
     public long tiempo;
@@ -33,10 +37,41 @@ public class Manejador extends javax.swing.JFrame {
         SO = new SistemaOperativo(tiempo);
         timerIniciar.start();
         timer.start();
+        timerColaCPU.start();
+        timerColaBloqueados.start();
         ListaAgregar.clear();
         jList1.setModel(ListaAgregar);
+        TablaEnColaCPU.setModel(ModeloTablaColaCPU);
+        TablaBloqueados.setModel(ModeloTablaColaBloqueados);
     }
 
+    Timer timerColaCPU = new Timer(INTERVAL, new ActionListener() {
+    public void actionPerformed(ActionEvent evt) {
+        SO.SiguienteEnCPU();
+        ArrayList<Proceso> cola = SO.Cola();
+        ModeloTablaColaCPU.setRowCount(0);
+        TablaEnColaCPU.setModel(ModeloTablaColaCPU);
+        for (Proceso proc : cola){
+            String[] data = {proc.ID.toString(),proc.ID.toString(),proc.ID.toString()};
+            ModeloTablaColaCPU.insertRow(cola.indexOf(proc),data);
+            TablaEnColaCPU.setModel(ModeloTablaColaCPU);
+        }
+        }    
+    });
+    
+    Timer timerColaBloqueados = new Timer(INTERVAL, new ActionListener() {
+    public void actionPerformed(ActionEvent evt) {
+        SO.SiguienteEnCPU();
+        ArrayList<Proceso> cola2 = SO.Cola();
+        ModeloTablaColaBloqueados.setRowCount(0);
+        TablaBloqueados.setModel(ModeloTablaColaBloqueados);
+        for (Proceso proc2 : cola2){
+            String[] data2 = {proc2.ID.toString(),proc2.ID.toString(),proc2.ID.toString()};
+            ModeloTablaColaBloqueados.insertRow(cola2.indexOf(proc2),data2);
+            TablaBloqueados.setModel(ModeloTablaColaBloqueados);
+        }
+        }    
+    });
     
     Timer timer = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
@@ -107,7 +142,7 @@ public class Manejador extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaBloqueados = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        TablaEnCola = new javax.swing.JTable();
+        TablaEnColaCPU = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -331,20 +366,37 @@ public class Manejador extends javax.swing.JFrame {
 
         TablaBloqueados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Prioridad", "Tipo Bloqueo"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(TablaBloqueados);
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 300, 260));
 
-        TablaEnCola.setModel(new javax.swing.table.DefaultTableModel(
+        TablaEnColaCPU.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -355,7 +407,7 @@ public class Manejador extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(TablaEnCola);
+        jScrollPane3.setViewportView(TablaEnColaCPU);
 
         jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 300, 260));
         jPanel3.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, 620, -1));
@@ -448,7 +500,7 @@ public class Manejador extends javax.swing.JFrame {
     private javax.swing.JPanel PanelVerde;
     private javax.swing.JTextField PidProceso;
     private javax.swing.JTable TablaBloqueados;
-    private javax.swing.JTable TablaEnCola;
+    private javax.swing.JTable TablaEnColaCPU;
     private javax.swing.JLabel Texto_ID;
     private javax.swing.JLabel Texto_IntervaloES;
     private javax.swing.JLabel Texto_Prioridad;
