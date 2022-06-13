@@ -4,6 +4,9 @@
  */
 package com.mycompany.obligatorio2;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -19,6 +22,8 @@ public class ContenedorProcesosHashMap {
     public Integer procesoParaBloquearID;
     public Integer procesoParaDesbloquearID;
     public Procesador CPU;
+    
+    public ArrayList<Proceso> arrayRetornado = new ArrayList<>();
     
     
     public ContenedorProcesosHashMap(Procesador cpu){
@@ -168,5 +173,17 @@ public class ContenedorProcesosHashMap {
            Proceso p = mapa.get(id);
             p.prioridad = nuevaPrioridad; 
         }
+    }
+    
+    public void listaSiguienteEnCPU(){
+        ArrayList<Proceso> array2 = new ArrayList<>(mapa.values());
+        arrayRetornado.clear();
+        arrayRetornado.addAll(array2);
+        Collections.sort(arrayRetornado, new Comparator<Proceso>() {
+            @Override
+            public int compare(Proceso p1, Proceso p2) {
+                return p1.ID - p2.ID;
+            }
+        });
     }
 }

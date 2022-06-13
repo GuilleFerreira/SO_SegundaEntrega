@@ -4,6 +4,8 @@
  */
 package com.mycompany.obligatorio2;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author inazu
@@ -100,5 +102,13 @@ public class SistemaOperativo {
     */
     public void Iniciar(){
         this.contenedor.iterarSobreProcesos();
+    }
+    
+    public void SiguienteEnCPU(){
+        this.contenedor.listaSiguienteEnCPU();
+    }
+    
+    public ArrayList<Proceso> Cola(){
+        return this.contenedor.arrayRetornado;
     }
 }
