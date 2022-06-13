@@ -52,7 +52,7 @@ public class Manejador extends javax.swing.JFrame {
         ModeloTablaColaCPU.setRowCount(0);
         TablaEnColaCPU.setModel(ModeloTablaColaCPU);
         for (Proceso proc : cola){
-            String[] data = {proc.ID.toString(),proc.ID.toString(),proc.ID.toString()};
+            String[] data = {proc.getID(),proc.getPrioridad(),proc.getEsDeUsuario()};
             ModeloTablaColaCPU.insertRow(cola.indexOf(proc),data);
             TablaEnColaCPU.setModel(ModeloTablaColaCPU);
         }
@@ -61,12 +61,12 @@ public class Manejador extends javax.swing.JFrame {
     
     Timer timerColaBloqueados = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
-        SO.SiguienteEnCPU();
-        ArrayList<Proceso> cola2 = SO.Cola();
+        SO.SiguienteBloqueado();
+        ArrayList<Proceso> cola2 = SO.ColaBloqueados();
         ModeloTablaColaBloqueados.setRowCount(0);
         TablaBloqueados.setModel(ModeloTablaColaBloqueados);
         for (Proceso proc2 : cola2){
-            String[] data2 = {proc2.ID.toString(),proc2.ID.toString(),proc2.ID.toString()};
+            String[] data2 = {proc2.getID(),proc2.getPrioridad(),proc2.getEsDeUsuario()};
             ModeloTablaColaBloqueados.insertRow(cola2.indexOf(proc2),data2);
             TablaBloqueados.setModel(ModeloTablaColaBloqueados);
         }

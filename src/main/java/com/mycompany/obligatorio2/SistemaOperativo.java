@@ -57,24 +57,16 @@ public class SistemaOperativo {
     public String[] enCPU(){
         String InfoProceso[] = new String[7];
         if (procesador.procesoActual != null){
-            String procesoID = procesador.procesoActual.ID.toString();
-            String procesoPrioridad = procesador.procesoActual.prioridad + "";
-            String procesoSOoUser = "SO";
-            if (procesador.procesoActual.esDeUsuario == true){
-                procesoSOoUser = "Usuario";
-            }
             long porcentaje = (long)((float) procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar * 100);
             String procesoTiempoEnCPU = String.valueOf(procesador.procesoActual.tiempoEnCpu) + "/" + String.valueOf(procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar);
-            String procesoIntervaloES = String.valueOf(procesador.procesoActual.intervaloES);
-            String procesoTiempoES = String.valueOf(procesador.procesoActual.tiempoEnES);
             String procesoPorcentaje = porcentaje + "";
             
-            InfoProceso[0] = procesoID;
-            InfoProceso[1] = procesoPrioridad;
-            InfoProceso[2] = procesoSOoUser;
+            InfoProceso[0] = procesador.procesoActual.getID();
+            InfoProceso[1] = procesador.procesoActual.getPrioridad();
+            InfoProceso[2] = procesador.procesoActual.getEsDeUsuario();
             InfoProceso[3] = procesoTiempoEnCPU;
-            InfoProceso[4] = procesoIntervaloES;
-            InfoProceso[5] = procesoTiempoES;
+            InfoProceso[4] = procesador.procesoActual.getIntervaloES();
+            InfoProceso[5] = procesador.procesoActual.getTiempoES();
             InfoProceso[6] = procesoPorcentaje;
             return InfoProceso;
         }else{
@@ -108,7 +100,15 @@ public class SistemaOperativo {
         this.contenedor.listaSiguienteEnCPU();
     }
     
+    public void SiguienteBloqueado(){
+        this.contenedor.listaSiguienteBloqueado();
+    }
+    
     public ArrayList<Proceso> Cola(){
         return this.contenedor.arrayRetornado;
+    }
+    
+    public ArrayList<Proceso> ColaBloqueados(){
+        return this.contenedor.arrayRetornadoBloqueados;
     }
 }

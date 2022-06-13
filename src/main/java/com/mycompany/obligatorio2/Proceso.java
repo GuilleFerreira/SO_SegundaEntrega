@@ -69,6 +69,37 @@ public class Proceso {
         return Objects.equals(this.ID, other.ID);
     }
     
+    public String getID(){
+        return this.ID.toString();
+    }
     
+    public String getPrioridad(){
+        String gPrioridad = Integer.toString(this.prioridad);
+        return gPrioridad;
+    }
     
+    public String getEsDeUsuario(){
+        String gEsDeUsuario;
+        if (this.esDeUsuario == true){
+            gEsDeUsuario = "Usuario";
+        }else{
+            gEsDeUsuario = "SO";
+        }
+        return gEsDeUsuario;
+    }
+    
+    public String getTiempoParaFinalizar(){
+        String gTiempoPF = this.tiempoQueDebeEstarEnCPUparaFinalizar + "";
+        return gTiempoPF;
+    }
+    
+    public String getIntervaloES(){
+        String gIntervaloES = this.intervaloES + "";
+        return gIntervaloES;
+    }
+    
+    public String getTiempoES(){
+        String gTiempoES = this.tiempoEnES + "";
+        return gTiempoES;
+    }
 }

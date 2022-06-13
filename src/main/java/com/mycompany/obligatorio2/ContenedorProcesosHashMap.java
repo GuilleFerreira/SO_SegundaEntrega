@@ -24,6 +24,7 @@ public class ContenedorProcesosHashMap {
     public Procesador CPU;
     
     public ArrayList<Proceso> arrayRetornado = new ArrayList<>();
+    public ArrayList<Proceso> arrayRetornadoBloqueados = new ArrayList<>();
     
     
     public ContenedorProcesosHashMap(Procesador cpu){
@@ -178,11 +179,29 @@ public class ContenedorProcesosHashMap {
     public void listaSiguienteEnCPU(){
         ArrayList<Proceso> array2 = new ArrayList<>(mapa.values());
         arrayRetornado.clear();
-        arrayRetornado.addAll(array2);
+        arrayRetornado = (ArrayList)array2.clone();
+        arrayRetornado.removeIf(proceso -> (proceso.enEjecucion) == true);
+        arrayRetornado.removeIf(proceso -> (proceso.bloqueadoPorES) == true);
+        arrayRetornado.removeIf(proceso -> (proceso.bloqueadoPorUsuario) == true);
         Collections.sort(arrayRetornado, new Comparator<Proceso>() {
             @Override
             public int compare(Proceso p1, Proceso p2) {
-                return p1.ID - p2.ID;
+                return p1.prioridad - p2.prioridad;
+            }
+        });
+    }
+    
+    public void listaSiguienteBloqueado(){
+        ArrayList<Proceso> arrayBloq = new ArrayList<>(mapa.values());
+        arrayRetornadoBloqueados.clear();
+        arrayRetornadoBloqueados = (ArrayList)arrayBloq.clone();
+        arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.enEjecucion) == true);
+        //arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.bloqueadoPorES) == false);
+        //arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.bloqueadoPorUsuario) == false);
+        Collections.sort(arrayRetornadoBloqueados, new Comparator<Proceso>() {
+            @Override
+            public int compare(Proceso p11, Proceso p22) {
+                return p11.prioridad - p22.prioridad;
             }
         });
     }
