@@ -18,11 +18,12 @@ import javax.swing.table.DefaultTableModel;
 public class Manejador extends javax.swing.JFrame {
 
     SistemaOperativo SO;
-    DefaultListModel ListaAgregar = new DefaultListModel();
     String[] columnColaCPU = {"ID","Prioridad","Tipo"};
     String[] columnColaBloqueados = {"ID","Prioridad","Tipo"};
+    String[] columnColaCreados = {"ID","Prioridad","Tipo"};
     DefaultTableModel ModeloTablaColaCPU = new DefaultTableModel(columnColaCPU,1);
     DefaultTableModel ModeloTablaColaBloqueados = new DefaultTableModel(columnColaBloqueados,1);
+    DefaultTableModel ModeloTablaColaCreados = new DefaultTableModel(columnColaCreados,1);
     public final static int INTERVAL = 10;
     public final static int INTERVAL2 = 1;
     public long tiempo;
@@ -39,10 +40,11 @@ public class Manejador extends javax.swing.JFrame {
         timer.start();
         timerColaCPU.start();
         timerColaBloqueados.start();
-        ListaAgregar.clear();
-        jList1.setModel(ListaAgregar);
         TablaEnColaCPU.setModel(ModeloTablaColaCPU);
         TablaBloqueados.setModel(ModeloTablaColaBloqueados);
+        jTableCreados.setModel(ModeloTablaColaCreados);
+        ModeloTablaColaCreados.setRowCount(0);
+        jTableCreados.setModel(ModeloTablaColaCreados);
     }
 
     Timer timerColaCPU = new Timer(INTERVAL, new ActionListener() {
@@ -105,26 +107,28 @@ public class Manejador extends javax.swing.JFrame {
 
         PanelVerde = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         BotonCargarProcesos = new javax.swing.JButton();
         PidProceso = new javax.swing.JTextField();
         BotonCrearProceso = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Texto_ID = new javax.swing.JLabel();
-        PPrioridad = new javax.swing.JComboBox<>();
+        PPrioridadCambiar = new javax.swing.JComboBox<>();
         Texto_Prioridad = new javax.swing.JLabel();
         Texto_TipoProceso = new javax.swing.JLabel();
         PTipoProceso = new javax.swing.JComboBox<>();
         Texto_TiempoDeEjecucion = new javax.swing.JLabel();
         PTFinalizar = new javax.swing.JTextField();
         Texto_IntervaloES = new javax.swing.JLabel();
-        PIntervaloES = new javax.swing.JTextField();
         Texto_TiempoES = new javax.swing.JLabel();
         PTiempoES = new javax.swing.JTextField();
         PIntervaloES1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        BotonBloquear = new javax.swing.JButton();
+        BotonCambiarPriordad = new javax.swing.JButton();
+        IDbloqodesbloq = new javax.swing.JTextField();
+        PPrioridad = new javax.swing.JComboBox<>();
+        BotonDesbloquear = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTableCreados = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         enCPU2 = new javax.swing.JLabel();
         PAid = new javax.swing.JLabel();
@@ -158,18 +162,6 @@ public class Manejador extends javax.swing.JFrame {
         jLabel2.setText("Creador de Procesos");
         PanelVerde.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, -1, -1));
 
-        jList1.setBackground(new java.awt.Color(3, 100, 46));
-        jList1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        jList1.setForeground(new java.awt.Color(255, 255, 255));
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        PanelVerde.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 250, -1));
-
         BotonCargarProcesos.setBackground(new java.awt.Color(3, 100, 46));
         BotonCargarProcesos.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
         BotonCargarProcesos.setForeground(new java.awt.Color(255, 255, 255));
@@ -180,14 +172,14 @@ public class Manejador extends javax.swing.JFrame {
                 BotonCargarProcesosActionPerformed(evt);
             }
         });
-        PanelVerde.add(BotonCargarProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, 120, 30));
+        PanelVerde.add(BotonCargarProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 460, 120, 30));
 
         PidProceso.setBackground(new java.awt.Color(3, 100, 46));
         PidProceso.setForeground(new java.awt.Color(255, 255, 255));
         PidProceso.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         PidProceso.setText("1");
         PidProceso.setBorder(null);
-        PanelVerde.add(PidProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 110, 30));
+        PanelVerde.add(PidProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 110, 30));
 
         BotonCrearProceso.setBackground(new java.awt.Color(3, 100, 46));
         BotonCrearProceso.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
@@ -199,47 +191,47 @@ public class Manejador extends javax.swing.JFrame {
                 BotonCrearProcesoActionPerformed(evt);
             }
         });
-        PanelVerde.add(BotonCrearProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 130, 30));
+        PanelVerde.add(BotonCrearProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 130, 30));
 
         jLabel3.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Procesos Creados:");
-        PanelVerde.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, -1, -1));
+        PanelVerde.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 290, -1, -1));
 
         Texto_ID.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_ID.setForeground(new java.awt.Color(255, 255, 255));
         Texto_ID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_ID.setText("ID:");
         Texto_ID.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        PanelVerde.add(Texto_ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 110, 30));
+        PanelVerde.add(Texto_ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 110, 30));
 
-        PPrioridad.setBackground(new java.awt.Color(3, 100, 46));
-        PPrioridad.setForeground(new java.awt.Color(255, 255, 255));
-        PPrioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
-        PanelVerde.add(PPrioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 80, 110, 30));
+        PPrioridadCambiar.setBackground(new java.awt.Color(255, 51, 51));
+        PPrioridadCambiar.setForeground(new java.awt.Color(255, 255, 255));
+        PPrioridadCambiar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
+        PanelVerde.add(PPrioridadCambiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 510, 110, 20));
 
         Texto_Prioridad.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_Prioridad.setForeground(new java.awt.Color(255, 255, 255));
         Texto_Prioridad.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_Prioridad.setText("Prioridad:");
-        PanelVerde.add(Texto_Prioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 50, 110, 30));
+        PanelVerde.add(Texto_Prioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 110, 30));
 
         Texto_TipoProceso.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_TipoProceso.setForeground(new java.awt.Color(255, 255, 255));
         Texto_TipoProceso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_TipoProceso.setText("Tipo de proceso:");
-        PanelVerde.add(Texto_TipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 110, 30));
+        PanelVerde.add(Texto_TipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 110, 30));
 
         PTipoProceso.setBackground(new java.awt.Color(3, 100, 46));
         PTipoProceso.setForeground(new java.awt.Color(255, 255, 255));
         PTipoProceso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "SO" }));
-        PanelVerde.add(PTipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 110, 30));
+        PanelVerde.add(PTipoProceso, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 110, 30));
 
         Texto_TiempoDeEjecucion.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_TiempoDeEjecucion.setForeground(new java.awt.Color(255, 255, 255));
         Texto_TiempoDeEjecucion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_TiempoDeEjecucion.setText("Tiempo de ejec:");
-        PanelVerde.add(Texto_TiempoDeEjecucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 110, 30));
+        PanelVerde.add(Texto_TiempoDeEjecucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 110, 30));
 
         PTFinalizar.setBackground(new java.awt.Color(3, 100, 46));
         PTFinalizar.setForeground(new java.awt.Color(255, 255, 255));
@@ -250,50 +242,98 @@ public class Manejador extends javax.swing.JFrame {
                 PTFinalizarActionPerformed(evt);
             }
         });
-        PanelVerde.add(PTFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 110, 30));
+        PanelVerde.add(PTFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 110, 30));
 
         Texto_IntervaloES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_IntervaloES.setForeground(new java.awt.Color(255, 255, 255));
         Texto_IntervaloES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_IntervaloES.setText("Intervalo E/S:");
-        PanelVerde.add(Texto_IntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 110, 30));
-
-        PIntervaloES.setBackground(new java.awt.Color(153, 153, 153));
-        PIntervaloES.setForeground(new java.awt.Color(0, 0, 0));
-        PIntervaloES.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        PIntervaloES.setText("ID");
-        PIntervaloES.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        PanelVerde.add(PIntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, 100, 20));
+        PanelVerde.add(Texto_IntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 110, 30));
 
         Texto_TiempoES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_TiempoES.setForeground(new java.awt.Color(255, 255, 255));
         Texto_TiempoES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Texto_TiempoES.setText("Tiempo E/S:");
-        PanelVerde.add(Texto_TiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 110, 30));
+        PanelVerde.add(Texto_TiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 110, 30));
 
         PTiempoES.setBackground(new java.awt.Color(3, 100, 46));
         PTiempoES.setForeground(new java.awt.Color(255, 255, 255));
         PTiempoES.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         PTiempoES.setText("1000");
-        PanelVerde.add(PTiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 110, 30));
+        PanelVerde.add(PTiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, 110, 30));
 
         PIntervaloES1.setBackground(new java.awt.Color(3, 100, 46));
         PIntervaloES1.setForeground(new java.awt.Color(255, 255, 255));
         PIntervaloES1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         PIntervaloES1.setText("8000");
-        PanelVerde.add(PIntervaloES1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, 110, 30));
+        PanelVerde.add(PIntervaloES1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 110, 30));
 
-        jButton1.setBackground(new java.awt.Color(255, 51, 51));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Bloquear");
-        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        PanelVerde.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 540, 110, 20));
+        BotonBloquear.setBackground(new java.awt.Color(255, 51, 51));
+        BotonBloquear.setForeground(new java.awt.Color(255, 255, 255));
+        BotonBloquear.setText("Bloquear");
+        BotonBloquear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BotonBloquear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonBloquearActionPerformed(evt);
+            }
+        });
+        PanelVerde.add(BotonBloquear, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 540, 110, 20));
 
-        jButton2.setBackground(new java.awt.Color(255, 51, 51));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Desbloquear");
-        jButton2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        PanelVerde.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 540, 100, 20));
+        BotonCambiarPriordad.setBackground(new java.awt.Color(255, 51, 51));
+        BotonCambiarPriordad.setForeground(new java.awt.Color(255, 255, 255));
+        BotonCambiarPriordad.setText("Cambiar Prioridad");
+        BotonCambiarPriordad.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BotonCambiarPriordad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCambiarPriordadActionPerformed(evt);
+            }
+        });
+        PanelVerde.add(BotonCambiarPriordad, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 510, 100, 20));
+
+        IDbloqodesbloq.setBackground(new java.awt.Color(153, 153, 153));
+        IDbloqodesbloq.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        IDbloqodesbloq.setForeground(new java.awt.Color(0, 0, 0));
+        IDbloqodesbloq.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        IDbloqodesbloq.setText("ID");
+        IDbloqodesbloq.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        IDbloqodesbloq.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IDbloqodesbloqMouseClicked(evt);
+            }
+        });
+        PanelVerde.add(IDbloqodesbloq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, 100, 50));
+
+        PPrioridad.setBackground(new java.awt.Color(3, 100, 46));
+        PPrioridad.setForeground(new java.awt.Color(255, 255, 255));
+        PPrioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99" }));
+        PanelVerde.add(PPrioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 70, 110, 30));
+
+        BotonDesbloquear.setBackground(new java.awt.Color(255, 51, 51));
+        BotonDesbloquear.setForeground(new java.awt.Color(255, 255, 255));
+        BotonDesbloquear.setText("Desbloquear");
+        BotonDesbloquear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        BotonDesbloquear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonDesbloquearActionPerformed(evt);
+            }
+        });
+        PanelVerde.add(BotonDesbloquear, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 540, 100, 20));
+
+        jTableCreados.setBackground(new java.awt.Color(255, 255, 255));
+        jTableCreados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTableCreados);
+
+        PanelVerde.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 270, 140));
 
         getContentPane().add(PanelVerde, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 350, 580));
 
@@ -364,6 +404,7 @@ public class Manejador extends javax.swing.JFrame {
         jProgressBar1.setForeground(new java.awt.Color(0, 102, 0));
         jPanel3.add(jProgressBar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 290, 30));
 
+        TablaBloqueados.setBackground(new java.awt.Color(255, 255, 255));
         TablaBloqueados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -396,6 +437,7 @@ public class Manejador extends javax.swing.JFrame {
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, 300, 260));
 
+        TablaEnColaCPU.setBackground(new java.awt.Color(255, 255, 255));
         TablaEnColaCPU.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -429,20 +471,47 @@ public class Manejador extends javax.swing.JFrame {
 
     private void BotonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearProcesoActionPerformed
         SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES1.getText(), PTiempoES.getText());
-        ListaAgregar.addElement(PidProceso.getText());
-        jList1.setModel(ListaAgregar);
+        String[] procesoC = {PidProceso.getText(),PPrioridad.getSelectedItem().toString(),PTipoProceso.getSelectedItem().toString()};
+        ModeloTablaColaCreados.addRow(procesoC);
+        jTableCreados.setModel(ModeloTablaColaCreados);
     }//GEN-LAST:event_BotonCrearProcesoActionPerformed
 
     private void BotonCargarProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarProcesosActionPerformed
         SO.cargarProcesos();
-        timer.start();
-        ListaAgregar.clear();
-        jList1.setModel(ListaAgregar);
+        ModeloTablaColaCreados.setRowCount(0);
+        jTableCreados.setModel(ModeloTablaColaCreados);
     }//GEN-LAST:event_BotonCargarProcesosActionPerformed
 
     private void PTFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PTFinalizarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PTFinalizarActionPerformed
+
+    private void BotonBloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBloquearActionPerformed
+        // BOTON BLOQUEAR
+        String idbloq = IDbloqodesbloq.getText();
+        SO.bloquearProceso(idbloq);
+        IDbloqodesbloq.setText("ID");
+    }//GEN-LAST:event_BotonBloquearActionPerformed
+
+    private void BotonCambiarPriordadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCambiarPriordadActionPerformed
+        // BOTON CAMBIAR PRIORIDAD
+        String idcambiar = IDbloqodesbloq.getText();
+        String prioricambiar = PPrioridadCambiar.getSelectedItem().toString();
+        SO.modifiarPrioridadProceso(idcambiar, Integer.parseInt(prioricambiar));
+        IDbloqodesbloq.setText("ID");
+    }//GEN-LAST:event_BotonCambiarPriordadActionPerformed
+
+    private void IDbloqodesbloqMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IDbloqodesbloqMouseClicked
+        // BOTON ID BLOQ O DESBLOQ
+        IDbloqodesbloq.setText("");
+    }//GEN-LAST:event_IDbloqodesbloqMouseClicked
+
+    private void BotonDesbloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDesbloquearActionPerformed
+        // BOTON DESBLOQUEAR
+        String iddesbloq = IDbloqodesbloq.getText();
+        SO.desbloquearProceso(iddesbloq);
+        IDbloqodesbloq.setText("ID");
+    }//GEN-LAST:event_BotonDesbloquearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -483,17 +552,21 @@ public class Manejador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonBloquear;
+    private javax.swing.JButton BotonCambiarPriordad;
     private javax.swing.JButton BotonCargarProcesos;
     private javax.swing.JButton BotonCrearProceso;
+    private javax.swing.JButton BotonDesbloquear;
+    private javax.swing.JTextField IDbloqodesbloq;
     private javax.swing.JLabel PAid;
     private javax.swing.JLabel PAintervalo;
     private javax.swing.JLabel PAprioridad;
     private javax.swing.JLabel PAtiempoES;
     private javax.swing.JLabel PAtiempoencpu;
     private javax.swing.JLabel PAtipo;
-    private javax.swing.JTextField PIntervaloES;
     private javax.swing.JTextField PIntervaloES1;
     private javax.swing.JComboBox<String> PPrioridad;
+    private javax.swing.JComboBox<String> PPrioridadCambiar;
     private javax.swing.JTextField PTFinalizar;
     private javax.swing.JTextField PTiempoES;
     private javax.swing.JComboBox<String> PTipoProceso;
@@ -513,18 +586,16 @@ public class Manejador extends javax.swing.JFrame {
     private javax.swing.JLabel enCPU5;
     private javax.swing.JLabel enCPU6;
     private javax.swing.JLabel enCPU7;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable jTableCreados;
     // End of variables declaration//GEN-END:variables
 }

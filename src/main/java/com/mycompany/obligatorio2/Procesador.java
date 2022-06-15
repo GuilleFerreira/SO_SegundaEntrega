@@ -41,10 +41,13 @@ public class Procesador {
         procesoActual.tiempoEnCpuAux = procesoActual.tiempoEnCpu;//Importante
         
         //cambio de prioridad del proceso actual
-        if(procesoActual.prioridad <= 84){
-            procesoActual.prioridad += 15;
-        }else{
-            procesoActual.prioridad = 99;
+        
+        if (procesoActual.esDeUsuario){
+            if(procesoActual.prioridad <= 84){
+                procesoActual.prioridad += 15;
+            }else{
+                procesoActual.prioridad = 99;
+            }
         }
         
         //El proceso actual deja de estar en ejecucion

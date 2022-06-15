@@ -36,6 +36,7 @@ public class ContenedorProcesosHashMap {
     }
     
     public Proceso buscarProceso(Integer id){
+        System.out.println(mapa);
         return mapa.get(id);
     }
     
@@ -71,25 +72,40 @@ public class ContenedorProcesosHashMap {
                 p.tiempoEsperando = System.currentTimeMillis() - p.tiempoCuandoSeCreo;//el tiempo que está esperando un proceso a su tiempo que realmente lleva esperando.
             }
             
-            /*ModificarPrioridad
+            /*ModificarPrioridad ---- ORIGINAL -----
             no tiene que estar en ejecución o en bloqueado si quiero hacer hilos que hagan diferentes cosas
             ya que pueden pasar cositas si accedo al mismo proceso desde 2 hilos y modifico algo
             Capaz no, pero just in case.
-            */
+            
             if((p.tiempoEsperando > 1000) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){//agregar que sea solo para user o SO, si es user, si prioridad es mayor que 20 bla bla bla
                 p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
                 p.tiempoCuandoSeCreo = System.currentTimeMillis();
                 p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
             }
+            */
             
-            //Cuando un proceso ya terminó según su tiempo para finalizar.
-            if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
-                p.enEjecucion = false;
-                this.CPU.dejarCpu();
-                procesoParaEliminar = p;
-                //System.out.println("TIEMPO EN CPU " + p.tiempoEnCpu);
-                //System.out.println(p.ID + " A ELIMINAR");
+            /*ModificarPrioridad SO
+            no tiene que estar en ejecución o en bloqueado si quiero hacer hilos que hagan diferentes cosas
+            ya que pueden pasar cositas si accedo al mismo proceso desde 2 hilos y modifico algo
+            Capaz no, pero just in case.
+            */
+            if((p.tiempoEsperando > 1000) && (!p.esDeUsuario) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){//agregar que sea solo para user o SO, si es user, si prioridad es mayor que 20 bla bla bla
+                p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
+                p.tiempoCuandoSeCreo = System.currentTimeMillis();
+                p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
             }
+            
+            /*ModificarPrioridad USUARIO
+            no tiene que estar en ejecución o en bloqueado si quiero hacer hilos que hagan diferentes cosas
+            ya que pueden pasar cositas si accedo al mismo proceso desde 2 hilos y modifico algo
+            Capaz no, pero just in case.
+            */
+            if((p.tiempoEsperando > 1000) && (p.esDeUsuario) && (p.prioridad > 20) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){//agregar que sea solo para user o SO, si es user, si prioridad es mayor que 20 bla bla bla
+                p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
+                p.tiempoCuandoSeCreo = System.currentTimeMillis();
+                p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
+            }
+            
             
             //System.out.println(p.ID + "-tiempo t " + p.tiempoTemporalEnCpu + " Tiempo aux: " + p.tiempoTemporalEnCpuAuxiliar + " intervalo: " + p.intervaloES);
             //Entrada y salida
@@ -148,6 +164,14 @@ public class ContenedorProcesosHashMap {
                 p.tiempoEnCpu = System.currentTimeMillis() - CPU.tiempoActualCuandoEntraProcesoEnCpu + p.tiempoEnCpuAux; 
             }
             
+            //Cuando un proceso ya terminó según su tiempo para finalizar.
+            if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
+                p.enEjecucion = false;
+                this.CPU.dejarCpu();
+                procesoParaEliminar = p;
+                //System.out.println("TIEMPO EN CPU " + p.tiempoEnCpu);
+                //System.out.println(p.ID + " A ELIMINAR");
+            }
             
             if(p.bloqueadoPorES){
                 
@@ -184,9 +208,15 @@ public class ContenedorProcesosHashMap {
     }
     
     public void modifiarPrioridadProceso(Integer id, int nuevaPrioridad){
-        if((nuevaPrioridad >= 1) && (nuevaPrioridad <= 99)){
-           Proceso p = mapa.get(id);
-            p.prioridad = nuevaPrioridad; 
+        Proceso p = (Proceso)mapa.get(id);
+        if (p.esDeUsuario){
+            if (nuevaPrioridad < 20){
+                p.prioridad = 20; 
+            }else{
+                p.prioridad = nuevaPrioridad;
+            }
+        }else{
+            p.prioridad = nuevaPrioridad;
         }
     }
     
