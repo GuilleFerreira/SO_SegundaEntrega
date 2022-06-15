@@ -20,6 +20,9 @@ public class Proceso {
     public long tiempoEsperando;
     public long tiempoAuxEsperando;
     public long tiempoQueDebeEstarEnCPUparaFinalizar;
+    public long tiempoQueLlevaBloqueado;
+    public long cuandoSeBloqueo;
+    public long tiempoQueFaltaParaSerDesbloqueado;
     
     public int prioridad;
     public Integer ID;
@@ -50,6 +53,12 @@ public class Proceso {
             this.tiempoEnES = tiempoEnES;
             this.intervaloES = intervaloES;
             this.esDeUsuario = esDeUsuario;
+            this.bloqueadoPorES = false;
+            this.bloqueadoPorUsuario = false;
+            this.enEjecucion = false;
+            this.tiempoQueLlevaBloqueado = 0;
+            this.tiempoQueFaltaParaSerDesbloqueado = tiempoEnES;
+            this.cuandoSeBloqueo = 0;
         }
     }
 
@@ -101,5 +110,9 @@ public class Proceso {
     public String getTiempoES(){
         String gTiempoES = this.tiempoEnES + "";
         return gTiempoES;
+    }
+    
+    public int getIntTiempoQUeFalta(){
+        return Math.toIntExact(tiempoQueFaltaParaSerDesbloqueado);
     }
 }

@@ -308,7 +308,7 @@ public class Manejador extends javax.swing.JFrame {
         PAid.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 24)); // NOI18N
         PAid.setForeground(new java.awt.Color(0, 0, 0));
         PAid.setText("jLabel1");
-        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 270, 30));
+        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 270, 30));
 
         PAprioridad.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAprioridad.setForeground(new java.awt.Color(0, 0, 0));
