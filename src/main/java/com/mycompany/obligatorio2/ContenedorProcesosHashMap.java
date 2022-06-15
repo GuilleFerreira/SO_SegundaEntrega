@@ -76,7 +76,7 @@ public class ContenedorProcesosHashMap {
             ya que pueden pasar cositas si accedo al mismo proceso desde 2 hilos y modifico algo
             Capaz no, pero just in case.
             */
-            if((p.tiempoEsperando > 1000) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
+            if((p.tiempoEsperando > 1000) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){//agregar que sea solo para user o SO, si es user, si prioridad es mayor que 20 bla bla bla
                 p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
                 p.tiempoCuandoSeCreo = System.currentTimeMillis();
                 p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
@@ -100,6 +100,7 @@ public class ContenedorProcesosHashMap {
                 p.tiempoCuandoSeBloqueoPorES = System.currentTimeMillis();
                 System.out.println("Se bloquea " + p.ID);
                 p.bloqueadoPorES = true;
+                p.cuandoSeBloqueo = System.currentTimeMillis();
                 if(!p.equals(procesoConMasPrioridad)){
                     if (this.CPU.libre && procesoConMasPrioridad != null){
                         this.CPU.usarCpu(procesoConMasPrioridad);
@@ -123,9 +124,11 @@ public class ContenedorProcesosHashMap {
                 //Si el tiempo que estuvo en entrada salida es mayor o igual al que debe estar en ES, lo desbloqueo
                 long tiempoQueEstuvoBloqueadoPorES = System.currentTimeMillis() - p.tiempoCuandoSeBloqueoPorES;
                 if(tiempoQueEstuvoBloqueadoPorES >= p.tiempoEnES){
-                    System.out.println("DESBLOQUEO " + p.ID + " ya que estuvo " + tiempoQueEstuvoBloqueadoPorES);
                     p.bloqueadoPorES = false;
                     p.tiempoTemporalEnCpu = 0;
+                    p.cuandoSeBloqueo = 0;
+                    p.tiempoQueFaltaParaSerDesbloqueado = p.tiempoEnES;
+                    p.tiempoQueLlevaBloqueado = 0;
                 }  
             }
             
@@ -146,6 +149,17 @@ public class ContenedorProcesosHashMap {
             }
             
             
+            if(p.bloqueadoPorES){
+                
+                p.tiempoQueLlevaBloqueado = Math.subtractExact(System.currentTimeMillis(), p.cuandoSeBloqueo);
+                p.tiempoQueFaltaParaSerDesbloqueado = Math.subtractExact(p.tiempoEnES, p.tiempoQueLlevaBloqueado);
+            }
+            if(p.bloqueadoPorUsuario){
+                p.tiempoQueFaltaParaSerDesbloqueado = Long.MAX_VALUE;
+            }
+            
+            
+            
             //Por prioridad sacar a los procesos de estado bloqueado cuando haya pasado su tiempo.
         }
         
@@ -158,7 +172,7 @@ public class ContenedorProcesosHashMap {
             //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
             //Al final del loop, acá, eliminar los procesos de esa lista.
             if(procesoParaEliminar != null){
-                System.out.println("Se elimina " + procesoParaEliminar.ID);
+                //System.out.println("Se elimina " + procesoParaEliminar.ID);
                 eliminarProceso(procesoParaEliminar.ID);
                 procesoParaEliminar = null;
             }
@@ -194,14 +208,20 @@ public class ContenedorProcesosHashMap {
     public void listaSiguienteBloqueado(){
         ArrayList<Proceso> arrayBloq = new ArrayList<>(mapa.values());
         arrayRetornadoBloqueados.clear();
-        arrayRetornadoBloqueados = (ArrayList)arrayBloq.clone();
-        arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.enEjecucion) == true);
-        //arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.bloqueadoPorES) == false);
-        //arrayRetornadoBloqueados.removeIf(proceso2 -> (proceso2.bloqueadoPorUsuario) == false);
+        for(Proceso p : arrayBloq){
+            if(!p.enEjecucion &&  (p.bloqueadoPorES || p.bloqueadoPorUsuario)){
+                try{
+                    Proceso copiaDeP = new Proceso(p.ID, p.prioridad, p.esDeUsuario, p.tiempoQueDebeEstarEnCPUparaFinalizar, p.intervaloES, p.tiempoEnES);
+                    arrayRetornadoBloqueados.add(copiaDeP);
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
         Collections.sort(arrayRetornadoBloqueados, new Comparator<Proceso>() {
             @Override
             public int compare(Proceso p11, Proceso p22) {
-                return p11.prioridad - p22.prioridad;
+                return p11.getIntTiempoQUeFalta() < p22.getIntTiempoQUeFalta() ? -1 : p11.getIntTiempoQUeFalta() == p22.getIntTiempoQUeFalta() ? 0 : 1;
             }
         });
     }
