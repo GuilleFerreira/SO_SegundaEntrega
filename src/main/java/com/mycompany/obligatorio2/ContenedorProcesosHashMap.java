@@ -209,19 +209,19 @@ public class ContenedorProcesosHashMap {
                 //System.out.println("USER " + p.getIntTiempoQUeFalta());
             }
             
-            
-            
-            //Por prioridad sacar a los procesos de estado bloqueado cuando haya pasado su tiempo.
         }
         
-        
+            /** SI el proceso con mas prioridad no es nulo y el cpu esta libre
+             * ponemos el proceso en CPU.
+             */
             if(procesoConMasPrioridad != null){
                 if (this.CPU.libre){
                     this.CPU.usarCpu(procesoConMasPrioridad);
                 }
             }
-            //Elimina el proceso que haya terminado, por cada for solo se puede eliminar uno.Si se quieren eliminar varios, hacer una lista e ir agregando si cumple la condicion
-            //Al final del loop, acá, eliminar los procesos de esa lista.
+            /**
+             * Elimina los procesos que ya terminaron.
+             */
             if(procesoParaEliminar != null){
                 //System.out.println("Se elimina " + procesoParaEliminar.ID);
                 eliminarProceso(procesoParaEliminar.ID);
