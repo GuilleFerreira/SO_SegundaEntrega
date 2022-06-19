@@ -48,15 +48,21 @@ public class SistemaOperativo {
     }
 
     //boton bloquear
-    public void bloquearProceso(String id) {
-        Integer ID = Integer.parseInt(id);
-        contenedor.procesoParaBloquearID = ID;
+    public void bloquearProceso(Integer ID) throws Exception{
+        if (!contenedor.mapa.containsKey(ID)){
+            throw new Exception("ID No existente");
+        }else{
+            this.contenedor.procesoParaBloquearID = ID;
+        }
     }
 
     //boton desbloquear
-    public void desbloquearProceso(String id) {
-        Integer ID = Integer.parseInt(id);
-        contenedor.procesoParaDesbloquearID = ID;
+    public void desbloquearProceso(Integer ID) throws Exception{
+        if (!contenedor.mapa.containsKey(ID)){
+            throw new Exception("ID No existente");
+        }else{
+            this.contenedor.procesoParaDesbloquearID = ID;
+        }
     }
 
     public String[] enCPU() {
@@ -115,7 +121,11 @@ public class SistemaOperativo {
         return this.contenedor.arrayRetornadoBloqueados;
     }
 
-    public void modifiarPrioridadProceso(String id, int prioridad) {
-        this.contenedor.modifiarPrioridadProceso(Integer.parseInt(id), prioridad);
+    public void modifiarPrioridadProceso(Integer ID, int prioridad) throws Exception{
+        if (!contenedor.mapa.containsKey(ID)){
+            throw new Exception("ID No existente");
+        }else{
+            this.contenedor.modifiarPrioridadProceso(ID, prioridad);
+        }
     }
 }

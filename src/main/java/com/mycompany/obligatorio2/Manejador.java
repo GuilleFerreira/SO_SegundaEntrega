@@ -7,7 +7,6 @@ package com.mycompany.obligatorio2;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
@@ -129,6 +128,8 @@ public class Manejador extends javax.swing.JFrame {
         BotonDesbloquear = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTableCreados = new javax.swing.JTable();
+        AvisoProcesos = new javax.swing.JLabel();
+        AvisoCambios = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         enCPU2 = new javax.swing.JLabel();
         PAid = new javax.swing.JLabel();
@@ -335,6 +336,13 @@ public class Manejador extends javax.swing.JFrame {
 
         PanelVerde.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 270, 140));
 
+        AvisoProcesos.setForeground(new java.awt.Color(255, 255, 255));
+        PanelVerde.add(AvisoProcesos, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 80, 30));
+
+        AvisoCambios.setForeground(new java.awt.Color(255, 255, 255));
+        AvisoCambios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        PanelVerde.add(AvisoCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 330, 20));
+
         getContentPane().add(PanelVerde, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 350, 580));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -348,7 +356,7 @@ public class Manejador extends javax.swing.JFrame {
         PAid.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 24)); // NOI18N
         PAid.setForeground(new java.awt.Color(0, 0, 0));
         PAid.setText("jLabel1");
-        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 270, 30));
+        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 380, 30));
 
         PAprioridad.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAprioridad.setForeground(new java.awt.Color(0, 0, 0));
@@ -470,13 +478,19 @@ public class Manejador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearProcesoActionPerformed
-        SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES1.getText(), PTiempoES.getText());
-        String[] procesoC = {PidProceso.getText(),PPrioridad.getSelectedItem().toString(),PTipoProceso.getSelectedItem().toString()};
-        ModeloTablaColaCreados.addRow(procesoC);
-        jTableCreados.setModel(ModeloTablaColaCreados);
+        try{
+            SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES1.getText(), PTiempoES.getText());
+            AvisoProcesos.setText("CREADO");
+            String[] procesoC = {PidProceso.getText(),PPrioridad.getSelectedItem().toString(),PTipoProceso.getSelectedItem().toString()};
+            ModeloTablaColaCreados.addRow(procesoC);
+            jTableCreados.setModel(ModeloTablaColaCreados);
+        }catch(Exception e){
+            AvisoProcesos.setText("ERROR");
+        }
     }//GEN-LAST:event_BotonCrearProcesoActionPerformed
 
     private void BotonCargarProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarProcesosActionPerformed
+        AvisoProcesos.setText("");
         SO.cargarProcesos();
         ModeloTablaColaCreados.setRowCount(0);
         jTableCreados.setModel(ModeloTablaColaCreados);
@@ -489,7 +503,19 @@ public class Manejador extends javax.swing.JFrame {
     private void BotonBloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBloquearActionPerformed
         // BOTON BLOQUEAR
         String idbloq = IDbloqodesbloq.getText();
-        SO.bloquearProceso(idbloq);
+        try{
+            Integer.parseInt(idbloq);
+            try{
+                SO.bloquearProceso(Integer.parseInt(idbloq));
+                AvisoCambios.setText(idbloq + " BLOQUEADO");
+            }
+            catch (Exception e){
+                AvisoCambios.setText("ID NO EXISTENTE");
+            }
+        }
+        catch (NumberFormatException e){
+            AvisoCambios.setText("ID INVÁLIDO");
+        }
         IDbloqodesbloq.setText("ID");
     }//GEN-LAST:event_BotonBloquearActionPerformed
 
@@ -497,8 +523,20 @@ public class Manejador extends javax.swing.JFrame {
         // BOTON CAMBIAR PRIORIDAD
         String idcambiar = IDbloqodesbloq.getText();
         String prioricambiar = PPrioridadCambiar.getSelectedItem().toString();
-        SO.modifiarPrioridadProceso(idcambiar, Integer.parseInt(prioricambiar));
-        IDbloqodesbloq.setText("ID");
+        try{
+            Integer.parseInt(idcambiar);
+            try{
+                SO.modifiarPrioridadProceso(Integer.parseInt(idcambiar), Integer.parseInt(prioricambiar));
+                IDbloqodesbloq.setText("ID");
+                AvisoCambios.setText("PRIORIDAD DE \"" + idcambiar + "\" CAMBIADA A: " + prioricambiar);
+            }
+            catch (Exception e){
+                AvisoCambios.setText("ID NO EXISTENTE");
+            }
+        }catch (NumberFormatException e){
+            AvisoCambios.setText("ID INVÁLIDO");
+        }
+            
     }//GEN-LAST:event_BotonCambiarPriordadActionPerformed
 
     private void IDbloqodesbloqMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IDbloqodesbloqMouseClicked
@@ -509,7 +547,19 @@ public class Manejador extends javax.swing.JFrame {
     private void BotonDesbloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDesbloquearActionPerformed
         // BOTON DESBLOQUEAR
         String iddesbloq = IDbloqodesbloq.getText();
-        SO.desbloquearProceso(iddesbloq);
+        try{
+            Integer.parseInt(iddesbloq);
+            try{
+                SO.desbloquearProceso(Integer.parseInt(iddesbloq));
+                AvisoCambios.setText(iddesbloq + " DESBLOQUEADO");
+            }
+            catch (Exception e){
+                AvisoCambios.setText("ID NO EXISTENTE");
+            }
+        }
+        catch (NumberFormatException e){
+            AvisoCambios.setText("ID INVÁLIDO");
+        }
         IDbloqodesbloq.setText("ID");
     }//GEN-LAST:event_BotonDesbloquearActionPerformed
 
@@ -529,21 +579,13 @@ public class Manejador extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Manejador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Manejador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Manejador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Manejador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Manejador(1).setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Manejador(1).setVisible(true);
         });
     }
     
@@ -552,6 +594,8 @@ public class Manejador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AvisoCambios;
+    private javax.swing.JLabel AvisoProcesos;
     private javax.swing.JButton BotonBloquear;
     private javax.swing.JButton BotonCambiarPriordad;
     private javax.swing.JButton BotonCargarProcesos;

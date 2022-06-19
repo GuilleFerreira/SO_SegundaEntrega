@@ -179,7 +179,7 @@ public class ContenedorProcesosHashMap {
                 p.tiempoQueFaltaParaSerDesbloqueado = Math.subtractExact(p.tiempoEnES, p.tiempoQueLlevaBloqueado);
             }
             if(p.bloqueadoPorUsuario){
-                p.tiempoQueFaltaParaSerDesbloqueado = Long.MAX_VALUE;
+                p.tiempoQueFaltaParaSerDesbloqueado = 2147483647;
             }
             
             
@@ -208,15 +208,21 @@ public class ContenedorProcesosHashMap {
     }
     
     public void modifiarPrioridadProceso(Integer id, int nuevaPrioridad){
-        Proceso p = (Proceso)mapa.get(id);
-        if (p.esDeUsuario){
-            if (nuevaPrioridad < 20){
-                p.prioridad = 20; 
+        
+        try{
+            mapa.containsKey(id);
+            Proceso p = (Proceso)mapa.get(id);
+            if (p.esDeUsuario){
+                if (nuevaPrioridad < 20){
+                    p.prioridad = 20; 
+                }else{
+                    p.prioridad = nuevaPrioridad;
+                }
             }else{
                 p.prioridad = nuevaPrioridad;
             }
-        }else{
-            p.prioridad = nuevaPrioridad;
+        } catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
     
