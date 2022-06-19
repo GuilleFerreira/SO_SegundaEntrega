@@ -36,6 +36,7 @@ public class ContenedorProcesosHashMap {
     }
     
     public Proceso buscarProceso(Integer id){
+        System.out.println(mapa);
         return mapa.get(id);
     }
     
@@ -55,51 +56,61 @@ public class ContenedorProcesosHashMap {
         int maxPrioridad = 99;
         Proceso procesoParaEliminar = null;
         for(Proceso p : mapa.values()){
-            //System.out.println(p.ID + " " + p.tiempoEnCpu + " " + p.tiempoTemporalEnCpu);
             // Se recorre quedandose con el proceso de prioridad más alta si no está en ejecución o bloqueado.
+            
+            /** Busqueda del proceso con mas prioridad
+             *  Se guarda el proceso con prioridad mas alta si no está en ejecución o bloqueado (Por E/S o Usuario).
+             */ 
             if((p.prioridad <= maxPrioridad) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
                 maxPrioridad = p.prioridad;
                 procesoConMasPrioridad = p;
             }
             
-            //Envcejecimiento
-            //Me aseguro que solo cuente el tiempo esperando cuando NO está bloqueado NI en ejecución.
-            //Ya que si tiene mucha E/S siempre será prioritario si no hiciesemos esto.
-            if(!p.bloqueadoPorES && !p.bloqueadoPorUsuario && !p.enEjecucion){
-                //Cuidado con overflow del float.
-                //El tiempo esperando es el tiempo que lleva el programa corriendo.
-                p.tiempoEsperando = System.currentTimeMillis() - p.tiempoCuandoSeCreo;//el tiempo que está esperando un proceso a su tiempo que realmente lleva esperando.
-            }
-            
-            /*ModificarPrioridad
-            no tiene que estar en ejecución o en bloqueado si quiero hacer hilos que hagan diferentes cosas
-            ya que pueden pasar cositas si accedo al mismo proceso desde 2 hilos y modifico algo
-            Capaz no, pero just in case.
+            /** Envcejecimiento
+             * Guardamos el tiempo que lleva esperando para entrar a CPU
+             * Nos aseguramos que solo cuente el tiempo si NO esta en ejecucion y NO esta bloqueado
+             * Ya que si tiene mucha E/S siempre será prioritario si no hiciesemos esto.
             */
-            if((p.tiempoEsperando > 1000) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){//agregar que sea solo para user o SO, si es user, si prioridad es mayor que 20 bla bla bla
-                p.prioridad--;//Se disminuye ya que la prioridad más alta es 1;
+            if(!p.bloqueadoPorES && !p.bloqueadoPorUsuario && !p.enEjecucion){
+                p.tiempoEsperando = System.currentTimeMillis() - p.tiempoCuandoSeCreo;
+            }
+            
+            /** ModificarPrioridad SO (Por Envejecimiento)
+             * Si un proceso de SO lleva mas de (x) tiempo esperando se le baja la prioridad
+             * Se verifica que el proceso no este en ejecucion ni bloqueado
+             * Se resetea el tiempo cuando fue creado y se pone en 0 el tiempo esperando.
+            */
+            if((p.tiempoEsperando > 1000) && (!p.esDeUsuario) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
+                p.prioridad--;
                 p.tiempoCuandoSeCreo = System.currentTimeMillis();
-                p.tiempoEsperando = 0;//Se resetea el tiempo esperando asi siempre que pasen x tiempo, entra a este if, sino se deberían hacer muchos if para cada intervalo de tiempo.
+                p.tiempoEsperando = 0;
             }
             
-            //Cuando un proceso ya terminó según su tiempo para finalizar.
-            if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
-                p.enEjecucion = false;
-                this.CPU.dejarCpu();
-                procesoParaEliminar = p;
-                //System.out.println("TIEMPO EN CPU " + p.tiempoEnCpu);
-                //System.out.println(p.ID + " A ELIMINAR");
+            /**ModificarPrioridad USUARIO (Por Envejecimiento)
+             * Si un proceso de Usuario lleva mas de (x) tiempo esperando se le baja la prioridad
+             * Se verifica que el proceso no este en ejecucion ni bloqueado
+             * Se resetea el tiempo cuando fue creado y se pone en 0 el tiempo esperando.
+            */
+            if((p.tiempoEsperando > 1000) && (p.esDeUsuario) && (p.prioridad > 20) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
+                p.prioridad--;
+                p.tiempoCuandoSeCreo = System.currentTimeMillis();
+                p.tiempoEsperando = 0;
             }
             
-            //System.out.println(p.ID + "-tiempo t " + p.tiempoTemporalEnCpu + " Tiempo aux: " + p.tiempoTemporalEnCpuAuxiliar + " intervalo: " + p.intervaloES);
-            //Entrada y salida
+            /** Verificamos que el tiempo en ejecucion no exceda el intervalo entre E/S
+             * Si el proceso esta en ejecucion y el tiempo en CPU es igual o mayor al intervalo en E/S el proceso
+             * se bloquea por E/S
+             * 
+             * Se resetea el tiempo por Auxiliar en CPU y se guarda el momento cuando se bloqueo.
+             */
+            
             if(p.enEjecucion && (p.tiempoTemporalEnCpuAuxiliar + p.tiempoTemporalEnCpu >= p.intervaloES)){
-                //System.out.println("Te lo bloqueo y sale de cpu " + p.ID);
-                p.tiempoTemporalEnCpuAuxiliar = 0;//Importante para que si vuelve a pasar, funcione igual.
+                p.tiempoTemporalEnCpuAuxiliar = 0;
                 this.CPU.dejarCpu();
                 p.tiempoCuandoSeBloqueoPorES = System.currentTimeMillis();
-                System.out.println("Se bloquea " + p.ID);
+                //System.out.println("Se bloquea " + p.ID);
                 p.bloqueadoPorES = true;
+                p.tiempoQueFaltaParaSerDesbloqueado = p.tiempoEnES;
                 p.cuandoSeBloqueo = System.currentTimeMillis();
                 if(!p.equals(procesoConMasPrioridad)){
                     if (this.CPU.libre && procesoConMasPrioridad != null){
@@ -108,20 +119,28 @@ public class ContenedorProcesosHashMap {
                 }
             }
             
-            //Respeta tiempo cpu
+            /** Si el proceso actual esta en ejecucion y excede el tiempo por proceso establecido por el CPU
+             * lo sacamos de CPU, dejandolo libre
+             * 
+             * Guardamos el tiempo temporal en CPU en tiempo temporal en CPU auxiliar.
+             * 
+             * Reseteamos el tiempo temporal en CPU
+             */
             if (p.enEjecucion && (p.tiempoTemporalEnCpu >= this.CPU.tiempoPorProceso)){
                 p.enEjecucion = false;
-                //Para evaluar el bloqueo por ES, ya que tiempoTemporal pasaria a ser 0 en las siguientes lineas
-                //Entonces si sale de cpu por que estuvo el tiempo max del cpu, me guardo en tiempoTemporalEnCpuAuxiliar, el tiempo que estuvo en cpu
-                //Sino nunca entraría a un bloqueo por ES porque el temporalEnCpu siempre será 0 si se salió del cpu por tiempo límite en cpu.
                 p.tiempoTemporalEnCpuAuxiliar = p.tiempoTemporalEnCpu; 
                 this.CPU.dejarCpu();
                 p.tiempoTemporalEnCpu = 0;
             }
 
+            /** Si el proceso esta bloqueado vamos incrementado el tiempo que lleva bloqueado
+             * 
+             * Si el proceso ya paso el tiempo que deberia estar bloqueado se desbloquea.
+             * 
+             * Reseteamos su tiempo temporal en CPU, cuando se bloqueo, tiempo que falta para ser bloqueado y tiempo que lleva bloqueado
+             */
             if(p.bloqueadoPorES){
                 //System.out.println(p.ID + "Bloqueado");
-                //Si el tiempo que estuvo en entrada salida es mayor o igual al que debe estar en ES, lo desbloqueo
                 long tiempoQueEstuvoBloqueadoPorES = System.currentTimeMillis() - p.tiempoCuandoSeBloqueoPorES;
                 if(tiempoQueEstuvoBloqueadoPorES >= p.tiempoEnES){
                     p.bloqueadoPorES = false;
@@ -132,30 +151,62 @@ public class ContenedorProcesosHashMap {
                 }  
             }
             
-            
+            /** Si el proceso es el que se ingreso para ser bloqueado lo bloqueamos y liberamos el CPU
+             * 
+             * Reseteamos el proceso que debe ser bloqueado.
+             */
             if(p.ID.equals(procesoParaBloquearID)){
                 p.bloqueadoPorUsuario = true;
+                if (p.enEjecucion){
+                    CPU.dejarCpu();
+                }
+                procesoParaBloquearID = null;
             }
             
+            /** Si el proceso es el que se ingreso para ser desbloqueado lo bloqueamos y liberamos el CPU
+             * 
+             * Reseteamos el proceso que debe ser desbloqueado.
+             */
             if(p.ID.equals(procesoParaDesbloquearID)){
                 p.bloqueadoPorUsuario = false;
+                p.tiempoQueFaltaParaSerDesbloqueado = 0;
+                procesoParaDesbloquearID = null;
             }
             
+            /** Si el proceso esta en ejecucion incrementamos el tiempo que lleva ejecutandose.
+             * 
+             * Tambien incrementamos el tiempo temporal
+             */
             if(p.enEjecucion){
                 p.tiempoTemporalEnCpu = System.currentTimeMillis() - CPU.tiempoActualCuandoEntraProcesoEnCpu;
-                //Mejorado, cada vez que el proceso sale de cpu, tiempoActualCuandoEntra, es 0, entonces, p.tiempoEnCpuAux, guarda el tiempoEnCpu, en el metodo dejarCpu
-                //Para poder llevar bien la cuenta de tiempo.
                 p.tiempoEnCpu = System.currentTimeMillis() - CPU.tiempoActualCuandoEntraProcesoEnCpu + p.tiempoEnCpuAux; 
             }
             
+            /** Si el proceso ya cumplio su tiempo en CPU lo eliminamos y liberamos el CPU.
+             */
+            if(p.tiempoEnCpu >= p.tiempoQueDebeEstarEnCPUparaFinalizar){
+                p.enEjecucion = false;
+                this.CPU.dejarCpu();
+                procesoParaEliminar = p;
+                //System.out.println("TIEMPO EN CPU " + p.tiempoEnCpu);
+                //System.out.println(p.ID + " A ELIMINAR");
+            }
             
+            /** Si el proceso esta bloqueado por ES
+             *  Actualizamos el tiempo que lleva bloqueado y el tiempo que falta para ser desbloqueado.
+             */
             if(p.bloqueadoPorES){
-                
                 p.tiempoQueLlevaBloqueado = Math.subtractExact(System.currentTimeMillis(), p.cuandoSeBloqueo);
                 p.tiempoQueFaltaParaSerDesbloqueado = Math.subtractExact(p.tiempoEnES, p.tiempoQueLlevaBloqueado);
+                //System.out.println(p.ID + " " + p.tiempoQueFaltaParaSerDesbloqueado);
             }
+            
+            /** Si el proceso esta bloqueado por Usuario
+             * Ponemos el valor máximo de tiempo que falta para ser desbloqueado.
+             */
             if(p.bloqueadoPorUsuario){
-                p.tiempoQueFaltaParaSerDesbloqueado = Long.MAX_VALUE;
+                p.tiempoQueFaltaParaSerDesbloqueado = 2147483600;
+                //System.out.println("USER " + p.getIntTiempoQUeFalta());
             }
             
             
@@ -184,9 +235,21 @@ public class ContenedorProcesosHashMap {
     }
     
     public void modifiarPrioridadProceso(Integer id, int nuevaPrioridad){
-        if((nuevaPrioridad >= 1) && (nuevaPrioridad <= 99)){
-           Proceso p = mapa.get(id);
-            p.prioridad = nuevaPrioridad; 
+        
+        try{
+            mapa.containsKey(id);
+            Proceso p = (Proceso)mapa.get(id);
+            if (p.esDeUsuario){
+                if (nuevaPrioridad < 20){
+                    p.prioridad = 20; 
+                }else{
+                    p.prioridad = nuevaPrioridad;
+                }
+            }else{
+                p.prioridad = nuevaPrioridad;
+            }
+        } catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
     
@@ -212,6 +275,7 @@ public class ContenedorProcesosHashMap {
             if(!p.enEjecucion &&  (p.bloqueadoPorES || p.bloqueadoPorUsuario)){
                 try{
                     Proceso copiaDeP = new Proceso(p.ID, p.prioridad, p.esDeUsuario, p.tiempoQueDebeEstarEnCPUparaFinalizar, p.intervaloES, p.tiempoEnES);
+                    copiaDeP.tiempoQueFaltaParaSerDesbloqueado = p.tiempoQueFaltaParaSerDesbloqueado;
                     arrayRetornadoBloqueados.add(copiaDeP);
                 }catch(Exception e){
                     System.out.println(e.getMessage());

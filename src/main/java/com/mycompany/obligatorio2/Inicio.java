@@ -36,10 +36,12 @@ public class Inicio extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         IngreseCantidad = new javax.swing.JLabel();
         TextFieldCantidad = new javax.swing.JTextField();
-        BotonInicio = new javax.swing.JPanel();
-        InicioTexto = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -85,52 +87,59 @@ public class Inicio extends javax.swing.JFrame {
         TextFieldCantidad.setText("1");
         TextFieldCantidad.setBorder(null);
         jPanel1.add(TextFieldCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 250, 40));
-
-        BotonInicio.setBackground(new java.awt.Color(3, 68, 46));
-        BotonInicio.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BotonInicioMouseClicked(evt);
-            }
-        });
-
-        InicioTexto.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
-        InicioTexto.setForeground(new java.awt.Color(1, 229, 80));
-        InicioTexto.setText("INICIAR");
-
-        javax.swing.GroupLayout BotonInicioLayout = new javax.swing.GroupLayout(BotonInicio);
-        BotonInicio.setLayout(BotonInicioLayout);
-        BotonInicioLayout.setHorizontalGroup(
-            BotonInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BotonInicioLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(InicioTexto)
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        BotonInicioLayout.setVerticalGroup(
-            BotonInicioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BotonInicioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(InicioTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jPanel1.add(BotonInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 130, 40));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 250, -1));
 
         jPanel3.setBackground(new java.awt.Color(3, 68, 46));
+
+        jLabel2.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Tomas Rama");
+
+        jLabel3.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Piero Saucedo");
+
+        jLabel4.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Guillermo Ferreira");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(62, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(293, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(10, 10, 10))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 240, 360));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 160, 360));
+
+        jButton1.setBackground(new java.awt.Color(3, 100, 46));
+        jButton1.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("INICIAR");
+        jButton1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, 130, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,12 +160,13 @@ public class Inicio extends javax.swing.JFrame {
         TextFieldTiempo.setForeground(Color.black);
     }//GEN-LAST:event_TextFieldTiempoMouseClicked
 
-    private void BotonInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BotonInicioMouseClicked
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // BOTON INICIO
         long tiempo = Long.parseLong(TextFieldTiempo.getText());
         Manejador mane = new Manejador(tiempo);
         mane.setVisible(true);
         dispose();
-    }//GEN-LAST:event_BotonInicioMouseClicked
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,14 +204,16 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel BotonInicio;
     private javax.swing.JLabel DeProcesos;
     private javax.swing.JLabel IngreseCantidad;
     private javax.swing.JLabel IngreseTiempo;
-    private javax.swing.JLabel InicioTexto;
     private javax.swing.JLabel Planificador;
     private javax.swing.JTextField TextFieldCantidad;
     private javax.swing.JTextField TextFieldTiempo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;

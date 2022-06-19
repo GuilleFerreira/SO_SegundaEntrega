@@ -15,7 +15,6 @@ public class Obligatorio2 {
         System.out.println("Hello World!");
         Inicio ini = new Inicio();
         ini.setVisible(true);
-        System.out.println(System.currentTimeMillis());
         /*
         Un objeto Procesador, que contenga un objeto proceso y otros atributos
         para saber cuanto tiempo lleva ahí entro otros y sacarlo a x tiempo
