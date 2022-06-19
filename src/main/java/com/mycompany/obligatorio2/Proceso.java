@@ -113,6 +113,6 @@ public class Proceso {
     }
     
     public int getIntTiempoQUeFalta(){
-        return Math.toIntExact(tiempoQueFaltaParaSerDesbloqueado);
+        return Math.toIntExact(this.tiempoQueFaltaParaSerDesbloqueado);
     }
 }

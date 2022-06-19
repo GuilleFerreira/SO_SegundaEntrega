@@ -21,13 +21,16 @@ public class SistemaOperativo {
     }
 
     //boton crear Proceso
-    public void crearProceso(String id, String prioridad, String DeUsuario, String tiempoParaFinalizar, String intervaloES, String tiempoEnES) {
+    public void crearProceso(String id, String prioridad, String DeUsuario, String tiempoParaFinalizar, String intervaloES, String tiempoEnES) throws Exception{
         Integer ID = Integer.parseInt(id);
         int prioridadInt = Integer.parseInt(prioridad);
         boolean esDeUsuario = (DeUsuario.compareTo("Usuario") == 0);
         long tiempoParaFinalizarLong = Long.parseLong(tiempoParaFinalizar);
         long intervaloESlong = Long.parseLong(intervaloES);
         long tiempoEnESlong = Long.parseLong(tiempoEnES);
+        if (contenedor.mapa.containsKey(ID)){
+            throw new Exception("ID ya existente");
+        }
         try {
             if (esDeUsuario) {
                 if (prioridadInt < 20) {
@@ -92,15 +95,6 @@ public class SistemaOperativo {
         }
     }
 
-    //PORCENTAJE DE TIEMPO, ESTO SERIA PARA LA GUI EL PORCENTAJE
-    /*
-    public long porcentajeProcesoEnCPU(){
-        long porcentaje;
-        long division = procesador.procesoActual.tiempoEnCpu / procesador.procesoActual.tiempoQueDebeEstarEnCPUparaFinalizar;
-        porcentaje = division;
-        return porcentaje;
-    }
-     */
     public void Iniciar() {
         this.contenedor.iterarSobreProcesos();
     }
