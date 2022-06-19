@@ -7,6 +7,8 @@ package com.mycompany.obligatorio2;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,6 +28,7 @@ public class Manejador extends javax.swing.JFrame {
     public final static int INTERVAL = 10;
     public final static int INTERVAL2 = 1;
     public long tiempo;
+    boolean ejemplotxt = false;
     
     /**
      * Creates new form Manejador
@@ -46,6 +49,9 @@ public class Manejador extends javax.swing.JFrame {
         jTableCreados.setModel(ModeloTablaColaCreados);
     }
 
+    /**
+     * TIMER DE LA TABLA COLA EN CPU.
+     */
     Timer timerColaCPU = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
         SO.SiguienteEnCPU();
@@ -60,6 +66,9 @@ public class Manejador extends javax.swing.JFrame {
         }    
     });
     
+    /**
+     * TIMER DE LA TABLA COLA BLOQUEADOS.
+     */
     Timer timerColaBloqueados = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
         SO.SiguienteBloqueado();
@@ -74,6 +83,9 @@ public class Manejador extends javax.swing.JFrame {
         }    
     });
     
+    /**
+     * TIMER DE PROCESO ACTUAL.
+     */
     Timer timer = new Timer(INTERVAL, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
         String[] info = SO.enCPU();
@@ -85,11 +97,13 @@ public class Manejador extends javax.swing.JFrame {
         PAtiempoES.setText(info[5]);
         String p = info[6];
         int porcentaje = Integer.parseInt(p);
-        //System.out.println("porcentaje " + porcentaje);
         jProgressBar1.setValue(porcentaje);
         }    
     });
     
+    /**
+     * TIMER PRINCIPAL.
+     */
     Timer timerIniciar = new Timer(INTERVAL2, new ActionListener() {
     public void actionPerformed(ActionEvent evt) {
         SO.Iniciar();
@@ -130,6 +144,7 @@ public class Manejador extends javax.swing.JFrame {
         jTableCreados = new javax.swing.JTable();
         AvisoProcesos = new javax.swing.JLabel();
         AvisoCambios = new javax.swing.JLabel();
+        ejemploTXT = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         enCPU2 = new javax.swing.JLabel();
         PAid = new javax.swing.JLabel();
@@ -231,8 +246,8 @@ public class Manejador extends javax.swing.JFrame {
         Texto_TiempoDeEjecucion.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_TiempoDeEjecucion.setForeground(new java.awt.Color(255, 255, 255));
         Texto_TiempoDeEjecucion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Texto_TiempoDeEjecucion.setText("Tiempo de ejec:");
-        PanelVerde.add(Texto_TiempoDeEjecucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 110, 110, 30));
+        Texto_TiempoDeEjecucion.setText("Tiempo de ejec (ms):");
+        PanelVerde.add(Texto_TiempoDeEjecucion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 130, 30));
 
         PTFinalizar.setBackground(new java.awt.Color(3, 100, 46));
         PTFinalizar.setForeground(new java.awt.Color(255, 255, 255));
@@ -248,13 +263,13 @@ public class Manejador extends javax.swing.JFrame {
         Texto_IntervaloES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_IntervaloES.setForeground(new java.awt.Color(255, 255, 255));
         Texto_IntervaloES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Texto_IntervaloES.setText("Intervalo E/S:");
-        PanelVerde.add(Texto_IntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, 110, 30));
+        Texto_IntervaloES.setText("Intervalo E/S (ms):");
+        PanelVerde.add(Texto_IntervaloES, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 130, 30));
 
         Texto_TiempoES.setFont(new java.awt.Font("HP Simplified Hans", 0, 14)); // NOI18N
         Texto_TiempoES.setForeground(new java.awt.Color(255, 255, 255));
         Texto_TiempoES.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Texto_TiempoES.setText("Tiempo E/S:");
+        Texto_TiempoES.setText("Tiempo E/S (ms):");
         PanelVerde.add(Texto_TiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 110, 30));
 
         PTiempoES.setBackground(new java.awt.Color(3, 100, 46));
@@ -342,6 +357,15 @@ public class Manejador extends javax.swing.JFrame {
         AvisoCambios.setForeground(new java.awt.Color(255, 255, 255));
         AvisoCambios.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         PanelVerde.add(AvisoCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 330, 20));
+
+        ejemploTXT.setBackground(new java.awt.Color(3, 68, 46));
+        ejemploTXT.setBorder(null);
+        ejemploTXT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ejemploTXTActionPerformed(evt);
+            }
+        });
+        PanelVerde.add(ejemploTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 20, 20));
 
         getContentPane().add(PanelVerde, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 0, 350, 580));
 
@@ -478,6 +502,9 @@ public class Manejador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonCrearProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCrearProcesoActionPerformed
+        /**
+         * BOTON PARA CREAR PROCESOS.
+         */
         try{
             SO.crearProceso(PidProceso.getText(), PPrioridad.getSelectedItem().toString(), PTipoProceso.getSelectedItem().toString(), PTFinalizar.getText(), PIntervaloES1.getText(), PTiempoES.getText());
             AvisoProcesos.setText("CREADO");
@@ -490,6 +517,9 @@ public class Manejador extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonCrearProcesoActionPerformed
 
     private void BotonCargarProcesosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCargarProcesosActionPerformed
+        /**
+         * BOTON PARA CARGAR PROCESOS.
+         */
         AvisoProcesos.setText("");
         SO.cargarProcesos();
         ModeloTablaColaCreados.setRowCount(0);
@@ -501,7 +531,9 @@ public class Manejador extends javax.swing.JFrame {
     }//GEN-LAST:event_PTFinalizarActionPerformed
 
     private void BotonBloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBloquearActionPerformed
-        // BOTON BLOQUEAR
+        /**
+         * BOTON BLOQUEAR PROCESO.
+         */
         String idbloq = IDbloqodesbloq.getText();
         try{
             Integer.parseInt(idbloq);
@@ -520,7 +552,9 @@ public class Manejador extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonBloquearActionPerformed
 
     private void BotonCambiarPriordadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCambiarPriordadActionPerformed
-        // BOTON CAMBIAR PRIORIDAD
+        /**
+         * BOTÓN CAMBIAR PRIORIDAD.
+         */
         String idcambiar = IDbloqodesbloq.getText();
         String prioricambiar = PPrioridadCambiar.getSelectedItem().toString();
         try{
@@ -540,12 +574,16 @@ public class Manejador extends javax.swing.JFrame {
     }//GEN-LAST:event_BotonCambiarPriordadActionPerformed
 
     private void IDbloqodesbloqMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IDbloqodesbloqMouseClicked
-        // BOTON ID BLOQ O DESBLOQ
+        /**
+         * BOTON ID BLOQUEAR/DESBLOQUEAR/CAMBIAR PRIORIDAD.
+         */
         IDbloqodesbloq.setText("");
     }//GEN-LAST:event_IDbloqodesbloqMouseClicked
 
     private void BotonDesbloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDesbloquearActionPerformed
-        // BOTON DESBLOQUEAR
+        /**
+         * BOTON DESBLOQUEAR.
+         */
         String iddesbloq = IDbloqodesbloq.getText();
         try{
             Integer.parseInt(iddesbloq);
@@ -562,6 +600,17 @@ public class Manejador extends javax.swing.JFrame {
         }
         IDbloqodesbloq.setText("ID");
     }//GEN-LAST:event_BotonDesbloquearActionPerformed
+
+    private void ejemploTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejemploTXTActionPerformed
+        if(ejemplotxt == false){
+            try {
+                SO.CargarTXT();
+            } catch (Exception ex) {
+                Logger.getLogger(Manejador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ejemplotxt = true;
+        }
+    }//GEN-LAST:event_ejemploTXTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -624,6 +673,7 @@ public class Manejador extends javax.swing.JFrame {
     private javax.swing.JLabel Texto_TiempoDeEjecucion;
     private javax.swing.JLabel Texto_TiempoES;
     private javax.swing.JLabel Texto_TipoProceso;
+    private javax.swing.JButton ejemploTXT;
     private javax.swing.JLabel enCPU2;
     private javax.swing.JLabel enCPU3;
     private javax.swing.JLabel enCPU4;
