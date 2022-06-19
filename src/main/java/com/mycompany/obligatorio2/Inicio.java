@@ -51,7 +51,7 @@ public class Inicio extends javax.swing.JFrame {
 
         IngreseTiempo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         IngreseTiempo.setForeground(new java.awt.Color(0, 0, 0));
-        IngreseTiempo.setText("Ingrese la cantidad de tiempo por proceso:");
+        IngreseTiempo.setText("Ingrese la cantidad de tiempo (milisegundos) por proceso:");
         jPanel1.add(IngreseTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, 20));
 
         Planificador.setFont(new java.awt.Font("HP Simplified Hans", 0, 36)); // NOI18N
@@ -73,8 +73,8 @@ public class Inicio extends javax.swing.JFrame {
                 TextFieldTiempoMouseClicked(evt);
             }
         });
-        jPanel1.add(TextFieldTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 250, 40));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 250, -1));
+        jPanel1.add(TextFieldTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 350, 40));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 350, -1));
 
         IngreseCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         IngreseCantidad.setForeground(new java.awt.Color(0, 0, 0));
@@ -86,8 +86,8 @@ public class Inicio extends javax.swing.JFrame {
         TextFieldCantidad.setForeground(new java.awt.Color(0, 0, 0));
         TextFieldCantidad.setText("1");
         TextFieldCantidad.setBorder(null);
-        jPanel1.add(TextFieldCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 250, 40));
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 250, -1));
+        jPanel1.add(TextFieldCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 350, 40));
+        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 350, 10));
 
         jPanel3.setBackground(new java.awt.Color(3, 68, 46));
 
@@ -127,7 +127,7 @@ public class Inicio extends javax.swing.JFrame {
                 .addGap(10, 10, 10))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 160, 360));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 160, 360));
 
         jButton1.setBackground(new java.awt.Color(3, 100, 46));
         jButton1.setFont(new java.awt.Font("HP Simplified Hans", 0, 12)); // NOI18N
@@ -162,10 +162,16 @@ public class Inicio extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // BOTON INICIO
-        long tiempo = Long.parseLong(TextFieldTiempo.getText());
-        Manejador mane = new Manejador(tiempo);
-        mane.setVisible(true);
-        dispose();
+        try{
+            Long.parseLong(TextFieldTiempo.getText());
+            long tiempo = Long.parseLong(TextFieldTiempo.getText());
+            Manejador mane = new Manejador(tiempo);
+            mane.setVisible(true);
+            dispose();
+        }catch (NumberFormatException e){
+            TextFieldTiempo.setText("Ingrese un valor válido:");
+            TextFieldTiempo.setForeground(Color.red);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

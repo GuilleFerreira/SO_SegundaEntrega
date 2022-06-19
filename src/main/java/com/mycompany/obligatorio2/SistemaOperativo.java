@@ -122,4 +122,13 @@ public class SistemaOperativo {
             this.contenedor.modifiarPrioridadProceso(ID, prioridad);
         }
     }
+    
+    public void CargarTXT() throws Exception{
+        String[] lectura = ManejadorArchivosGenerico.leerArchivo("./src/main/java/com/mycompany/obligatorio2/ejemplos.txt", true);
+        for (String linea : lectura){
+            String[] lineas = linea.split(",");
+            crearProceso(lineas[0], lineas[1], lineas[2], lineas[3], lineas[4], lineas[5]);
+        }
+        cargarProcesos();
+    }
 }
