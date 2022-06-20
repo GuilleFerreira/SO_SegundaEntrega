@@ -108,7 +108,6 @@ public class ContenedorProcesosHashMap {
                 p.tiempoTemporalEnCpuAuxiliar = 0;
                 this.CPU.dejarCpu();
                 p.tiempoCuandoSeBloqueoPorES = System.currentTimeMillis();
-                //System.out.println("Se bloquea " + p.ID);
                 p.bloqueadoPorES = true;
                 p.tiempoQueFaltaParaSerDesbloqueado = p.tiempoEnES;
                 p.cuandoSeBloqueo = System.currentTimeMillis();
@@ -140,7 +139,6 @@ public class ContenedorProcesosHashMap {
              * Reseteamos su tiempo temporal en CPU, cuando se bloqueo, tiempo que falta para ser bloqueado y tiempo que lleva bloqueado
              */
             if(p.bloqueadoPorES){
-                //System.out.println(p.ID + "Bloqueado");
                 long tiempoQueEstuvoBloqueadoPorES = System.currentTimeMillis() - p.tiempoCuandoSeBloqueoPorES;
                 if(tiempoQueEstuvoBloqueadoPorES >= p.tiempoEnES){
                     p.bloqueadoPorES = false;
@@ -188,8 +186,6 @@ public class ContenedorProcesosHashMap {
                 p.enEjecucion = false;
                 this.CPU.dejarCpu();
                 procesoParaEliminar = p;
-                //System.out.println("TIEMPO EN CPU " + p.tiempoEnCpu);
-                //System.out.println(p.ID + " A ELIMINAR");
             }
             
             /** Si el proceso esta bloqueado por ES
@@ -198,7 +194,6 @@ public class ContenedorProcesosHashMap {
             if(p.bloqueadoPorES){
                 p.tiempoQueLlevaBloqueado = Math.subtractExact(System.currentTimeMillis(), p.cuandoSeBloqueo);
                 p.tiempoQueFaltaParaSerDesbloqueado = Math.subtractExact(p.tiempoEnES, p.tiempoQueLlevaBloqueado);
-                //System.out.println(p.ID + " " + p.tiempoQueFaltaParaSerDesbloqueado);
             }
             
             /** Si el proceso esta bloqueado por Usuario
@@ -206,7 +201,6 @@ public class ContenedorProcesosHashMap {
              */
             if(p.bloqueadoPorUsuario){
                 p.tiempoQueFaltaParaSerDesbloqueado = 2147483600;
-                //System.out.println("USER " + p.getIntTiempoQUeFalta());
             }
             
         }
@@ -223,7 +217,6 @@ public class ContenedorProcesosHashMap {
              * Elimina los procesos que ya terminaron.
              */
             if(procesoParaEliminar != null){
-                //System.out.println("Se elimina " + procesoParaEliminar.ID);
                 eliminarProceso(procesoParaEliminar.ID);
                 procesoParaEliminar = null;
             }
