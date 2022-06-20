@@ -379,12 +379,12 @@ public class Manejador extends javax.swing.JFrame {
 
         PAid.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 24)); // NOI18N
         PAid.setForeground(new java.awt.Color(0, 0, 0));
-        PAid.setText("jLabel1");
-        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 380, 30));
+        PAid.setText("No hay procesos en CPU");
+        jPanel3.add(PAid, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 380, 30));
 
         PAprioridad.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAprioridad.setForeground(new java.awt.Color(0, 0, 0));
-        PAprioridad.setText("jLabel1");
+        PAprioridad.setText("No hay procesos en CPU");
         jPanel3.add(PAprioridad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 230, 30));
 
         enCPU3.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
@@ -394,7 +394,7 @@ public class Manejador extends javax.swing.JFrame {
 
         PAtipo.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAtipo.setForeground(new java.awt.Color(0, 0, 0));
-        PAtipo.setText("jLabel1");
+        PAtipo.setText("No hay procesos en CPU");
         jPanel3.add(PAtipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 210, 30));
 
         enCPU4.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
@@ -404,7 +404,7 @@ public class Manejador extends javax.swing.JFrame {
 
         PAtiempoencpu.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAtiempoencpu.setForeground(new java.awt.Color(0, 0, 0));
-        PAtiempoencpu.setText("jLabel1");
+        PAtiempoencpu.setText("No hay procesos en CPU");
         jPanel3.add(PAtiempoencpu, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 240, 30));
 
         enCPU5.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
@@ -414,7 +414,7 @@ public class Manejador extends javax.swing.JFrame {
 
         PAintervalo.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAintervalo.setForeground(new java.awt.Color(0, 0, 0));
-        PAintervalo.setText("jLabel1");
+        PAintervalo.setText("No hay procesos en CPU");
         jPanel3.add(PAintervalo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 230, 30));
 
         enCPU6.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
@@ -424,7 +424,7 @@ public class Manejador extends javax.swing.JFrame {
 
         PAtiempoES.setFont(new java.awt.Font("HP Simplified Hans Light", 0, 18)); // NOI18N
         PAtiempoES.setForeground(new java.awt.Color(0, 0, 0));
-        PAtiempoES.setText("jLabel1");
+        PAtiempoES.setText("No hay procesos en CPU");
         jPanel3.add(PAtiempoES, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 240, 30));
 
         enCPU7.setFont(new java.awt.Font("HP Simplified Hans", 0, 18)); // NOI18N
