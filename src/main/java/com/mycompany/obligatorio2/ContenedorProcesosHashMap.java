@@ -80,7 +80,7 @@ public class ContenedorProcesosHashMap {
              * Se verifica que el proceso no este en ejecucion ni bloqueado
              * Se resetea el tiempo cuando fue creado y se pone en 0 el tiempo esperando.
             */
-            if((p.tiempoEsperando > 1000) && (!p.esDeUsuario) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
+            if((p.tiempoEsperando > 5000) && (!p.esDeUsuario) && (p.prioridad > 1) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
                 p.prioridad--;
                 p.tiempoCuandoSeCreo = System.currentTimeMillis();
                 p.tiempoEsperando = 0;
@@ -91,7 +91,7 @@ public class ContenedorProcesosHashMap {
              * Se verifica que el proceso no este en ejecucion ni bloqueado
              * Se resetea el tiempo cuando fue creado y se pone en 0 el tiempo esperando.
             */
-            if((p.tiempoEsperando > 1000) && (p.esDeUsuario) && (p.prioridad > 20) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
+            if((p.tiempoEsperando > 5000) && (p.esDeUsuario) && (p.prioridad > 20) && (!p.enEjecucion) && (!p.bloqueadoPorES) && (!p.bloqueadoPorUsuario)){
                 p.prioridad--;
                 p.tiempoCuandoSeCreo = System.currentTimeMillis();
                 p.tiempoEsperando = 0;
